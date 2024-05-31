@@ -1,0 +1,296 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Option;
+use App\Models\Question;
+use App\Traits\GeneralFunctions;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+
+
+class OptionController extends Controller
+{
+
+    use GeneralFunctions;
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Option::with('question');
+            $table = DataTables::eloquent($query)
+                ->addColumn('id', function ($row) {
+                    return $row->id ? $row->id : '';
+                })
+                ->addColumn('question_id', function ($row) {
+                    return $row->question_id ? $row->question_id : '';
+                })
+                ->addColumn('icon', function ($row) {
+                    if ($row->icon) {
+                        return "<img class='rounded' src='" . asset('storage/' . $row->icon) . "' alt='logo' width='60' height='60' />";
+                    } else {
+                        return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
+                    }
+                })
+                ->addColumn('question', function ($row) {
+                    if ($row->question && $row->question->question_text && strlen($row->question->question_text) > 60) {
+                        return Str::limit($row->question->question_text, 60);
+                    } else {
+                        return $row->question && $row->question->question_text ? $row->question->question_text : '';
+                    }
+                })
+                ->addColumn('option_text', function ($row) {
+                    if (strlen($row->option_text) > 60) {
+                        return Str::limit($row->option_text, 60);
+                    } else {
+                        return $row->option_text ? $row->option_text : '';
+                    }
+                })
+                ->addColumn('is_active', function ($row) {
+                    $action = "is_active";
+                    $checked_flag = $row->is_active;
+                    $id = $row->id;
+                    $title = $row->title;
+                    $table_name = 'options';
+                    return view('layouts.actions.other_action', compact('action', 'checked_flag', 'id', 'title', 'table_name'));
+                })
+                ->addColumn('action', function ($row) {
+                    $table_name = 'options';
+                    $id = $row->id;
+                    $model = 'Option';
+                    $href = "/options/edit?id=$id";
+                    return view('options.action', compact('id', 'table_name', 'row', 'model', 'href'));
+                })->rawColumns(['icon'])
+                ->make(true);
+
+            return $table;
+        }
+
+        return view('options.index');
+    }
+
+    public function questionOptions(Request $request)
+    {
+        if ($request->ajax()) {
+            $question_id = $request->question_id;
+            $query = Option::where('question_id', $request->question_id);
+            $table = DataTables::eloquent($query)
+                ->addColumn('id', function ($row) {
+                    return $row->id ? $row->id : '';
+                })
+                ->addColumn('icon', function ($row) {
+                    if ($row->icon) {
+                        return "<img class='rounded' src='" . asset('storage/' . $row->icon) . "' alt='logo' width='60' height='60' />";
+                    } else {
+                        return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
+                    }
+                })
+                ->addColumn('option_text', function ($row) {
+                    if (strlen($row->option_text) > 60) {
+                        return Str::limit($row->option_text, 60);
+                    } else {
+                        return $row->option_text ? $row->option_text : '';
+                    }
+                })
+                ->addColumn('is_active', function ($row) {
+                    $action = "is_active";
+                    $checked_flag = $row->is_active;
+                    $id = $row->id;
+                    $title = $row->title;
+                    $table_name = 'options';
+                    return view('layouts.actions.other_action', compact('action', 'checked_flag', 'id', 'title', 'table_name'));
+                })
+                ->addColumn('action', function ($row) use ($question_id) {
+                    $table_name = 'options';
+                    $id = $row->id;
+                    $model = 'Option';
+                    $href = "/options/edit?id=$id&question_id=$question_id";
+                    return view('options.action', compact('id', 'table_name', 'row', 'model', 'href'));
+                })->rawColumns(['icon'])
+                ->make(true);
+
+            return $table;
+        }
+
+        return view('questions.show');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $questions = Question::all();
+        return view('options.create', compact('questions'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                'question_id' => 'required|integer',
+                'option_text' => 'required|max:255',
+            ]);
+
+            if ($validate->fails()) {
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+
+            if ($request->hasFile('icon')) {
+                // Handle the uploaded file
+                $image = $request->file('icon');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $path = 'images/icons/icon';
+
+                $imagePath =   $this->uploadImage($image, $imageName, $path);
+            } else {
+                $imagePath = null;
+            }
+
+            $newOrderNum = $this->arrangeOrderNumber('options', 'question_id', $request->question_id);
+
+
+            $option = Option::create([
+                'question_id' => $request->question_id,
+                'option_text' => $request->option_text,
+                'icon' => $imagePath,
+                'order_num' => $newOrderNum
+            ]);
+            //here i'm checking whether this storing is coming from a section page or not
+            if ($option && $request->question_id_req != null) {
+                session()->flash('success', 'Question successfully created');
+                return redirect()->to("/questions/show?id=$request->question_id");
+            } else {
+                session()->flash('success', 'Option Successfully Added.');
+                return redirect()->route('options.index');
+            }
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Option $option)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request)
+    {
+        $option_id = $request->id;
+        $questions = Question::all();
+        try {
+            if (isset($request->question_id)) {
+                $option = Option::where('id', $option_id)->where('question_id', $request->question_id)->first();
+                if (!$option) {
+                    $message = 'Cannot find the model';
+                    $route = route('questions.index');
+                    return view('layouts.errors.error404', compact('message', 'route'));
+                }
+            }
+            $option = Option::findOrFail($option_id);
+            return view('options.edit', compact('questions', 'option'));
+        } catch (ModelNotFoundException $e) {
+            $message = 'Cannot find the model';
+            $route = route('options.index');
+            return view('layouts.errors.error404', compact('message', 'route'));
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                'id' => 'required|integer',
+                'question_id' => 'required|integer',
+                'option_text' => 'required|max:255',
+            ]);
+
+            if ($validate->fails()) {
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+
+            $newOrderNum = $this->arrangeOrderNumber('options', 'question_id', $request->question_id);
+
+            if (isset($request->question_id)) {
+                $option = Option::where('id', $request->id)->where('question_id', $request->question_id)->first();
+                if (!$option) {
+                    $message = 'Cannot find the model';
+                    $route = route('options.index');
+                    return view('layouts.errors.error404', compact('message', 'route'));
+                }
+            } else {
+                // Find the survey by ID
+                $option = Option::findOrFail($request->id);
+            }
+
+            if ($request->hasFile('editIcon')) {
+                // Handle the uploaded file
+                $image = $request->file('editIcon');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $path = 'images/icons/icon';
+
+                $imagePath =   $this->uploadImage($image, $imageName, $path);
+            } else {
+                $imagePath = null;
+            }
+
+            // Update the property attributes using mass assignment
+            $OptionData = [
+                'question_id' => $request->question_id,
+                'option_text' => $request->option_text,
+                'order_num' => $newOrderNum
+            ];
+
+            if ($imagePath) {
+                $OptionData['icon'] = $imagePath;
+            }
+
+            $option->update($OptionData);
+
+            session()->flash('success', 'Option Updated Successfully.');
+
+            if ($request->question_id_req) {
+                return redirect()->to("/questions/show?id=$request->question_id");
+            } else {
+                return redirect()->route('options.index');
+            }
+        } catch (ModelNotFoundException $e) {
+            $message = 'Cannot find the model';
+            $route = route('options.index');
+            return view('layouts.errors.error404', compact('message', 'route'));
+        } catch (Exception $e) {
+            $route = route('options.index');
+            return view('layouts.errors.error500', compact('route'));
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Option $option)
+    {
+        //
+    }
+}

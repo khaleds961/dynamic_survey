@@ -1,0 +1,70 @@
+/* There used in login page, should keep them  */
+
+* { /* Or what selector you need */
+    unicode-bidi: plaintext;
+    /* text-align: start;  */
+    /* Align text automatically left/right*/
+  }
+
+.button_style {
+    background-color: #292562 !important;
+    color: aliceblue !important;
+}
+
+.button_style:hover {
+    background-color: #E6E6FA !important;
+    color: #696691 !important;
+}
+
+.sidebar_link:hover {
+    background-color: #fec482 !important;
+    color: #E6E6FA !important;
+}
+
+.active_links:active {
+    background-color: #E6E6FA !important;
+    color: aliceblue !important;
+}
+
+.active_links {
+    background-color: #E6E6FA !important;
+    color: aliceblue !important;
+}
+
+.search_button {
+    margin-top: 30px;
+    padding: 10px;
+}
+
+.btn-clicked {
+    background-color: white !important;
+}
+
+.margin_top_responsive {
+    margin-top: 22px
+}
+
+.ck-editor__editable_inline {
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.resize-none {
+    resize: none;
+}
+
+@media screen and (max-width: 768px) {
+    .search_button {
+        margin-top: 0;
+    }
+
+    .margin_top_responsive {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .full_width {
+        width: 100%;
+        margin-top: 10px !important;
+    }
+}

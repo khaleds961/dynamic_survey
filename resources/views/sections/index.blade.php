@@ -1,0 +1,287 @@
+@extends('layouts.master')
+@section('title', 'Sections')
+@section('content')
+
+    @if (session('success'))
+        <div id="flash-message" class="btn alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- BreadCrumbs --}}
+    <nav aria-label="breadcrumb" class="mb-1">
+        <div class="d-flex justify-content-between">
+            <ol class="breadcrumb border border-warning px-3 py-2 rounded">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('index') }}" class="text-info d-flex align-items-center"><i
+                            class="ti ti-home fs-4 mt-1"></i></a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" class="text-info">Sections</a>
+                </li>
+            </ol>
+
+
+            <div class="mx-2">
+                <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
+                    data-bs-toggle="modal" data-bs-target="#eventModal" id="modal_button">
+                    <i class="ti ti-circle-plus"></i>
+                    <span>Add New Section</span>
+                </a>
+            </div>
+
+            <!-- BEGIN ADD MODAL -->
+            <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">
+                                Add Section
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form class="modal-body" action="{{ route('sections.store') }}" method="POST"
+                            enctype="multipart/form-data" id="store_form">
+                            @csrf
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label class="form-label d-flex justify-content-between align-items-center">
+                                        <span>Title
+                                        </span>
+                                    </label>
+                                    <input id="title" name="title" type="text" class="form-control"
+                                        placeholder="Enter Title" />
+                                    <small id="titleHelp" class="form-text text-muted">Enter a clear title for your
+                                        section.</small>
+                                    <br />
+                                    <span id="title_error" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label d-flex justify-content-between align-items-center">
+                                        <span>Description
+                                        </span>
+                                    </label>
+                                    <textarea class="form-control resize-none" id="description" rows="3" name="description"></textarea>
+                                    <small id="descHelp" class="form-text text-muted">Enter a clear Description for your
+                                        section.</small>
+                                    <br />
+                                    <span id="description_error" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end my-4">
+                                <button class="btn btn-primary btn-add-event" id="save_section">
+                                    Submit
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL -->
+
+            <!-- BEGIN EDIT MODAL -->
+            <div class="modal fade" id="updateEventModal" tabindex="-1" aria-labelledby="updateEventModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateEventModalLabel">
+                                Update Section
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form class="modal-body" action="{{ route('sections.update') }}" method="POST" id="update_form">
+                            @csrf
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label class="form-label d-flex justify-content-between align-items-center">
+                                        <span>Title
+                                        </span>
+                                    </label>
+                                    <input id="edit_title" name="edit_title" type="text" class="form-control" />
+                                    <span id="edit_title_error" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label d-flex justify-content-between align-items-center">
+                                        <span>Description
+                                        </span>
+                                    </label>
+                                    <textarea class="form-control resize-none" id="edit_description" rows="3" name="edit_description"></textarea>
+                                    <span id="edit_description_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            {{-- //secret --}}
+                            <input type="hidden" name="id" id="section_id">
+                            <div class="d-flex justify-content-end my-4">
+                                <button class="btn btn-primary btn-add-event" id="update_section">
+                                    Update
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL -->
+
+        </div>
+    </nav>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="table-responsive rounded-2 my-2">
+                    <div class="table-responsive mx-4">
+                        <table id="sections-list" class="table border table-striped table-bordered display text-nowrap">
+                            <thead>
+                                <!-- start row -->
+                                <tr>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">#</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">description</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">action</h6>
+                                    </th>
+                                </tr>
+                                <!-- end row -->
+                            </thead>
+                            <tbody>
+                                <!-- start row -->
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+@endsection
+
+@push('after-scripts')
+    <script>
+        $(document).ready(function() {
+
+            var table = $('#sections-list').DataTable({
+                processing: true,
+                serverSide: true,
+                scrollY: '100%',
+                scrollCollapse: true,
+                paging: true,
+                responsive: true,
+                ajax: "{{ route('sections.index') }}",
+                columns: [{
+                        data: 'id',
+                        id: 'id'
+                    },
+                    {
+                        data: "title",
+                        name: 'title'
+                    },
+                    {
+                        data: "description",
+                        name: 'description'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active',
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        searchable: false,
+                        orderable: false
+                    },
+                ],
+                order: [0, 'desc'],
+            });
+
+            //store section
+            $('#save_section').on('click', function(e) {
+                e.preventDefault();
+                var title = $('#title').val();
+                var description = $('#description').val();
+
+                if (title == undefined || title.length < 1) {
+                    $('#title_error').text('Title is required.').addClass('errors')
+                } else {
+                    $('#title_error').text('').removeClass('errors')
+                }
+
+                if (description == undefined || description.length < 1) {
+                    $('#description_error').text('Description is required.').addClass('errors')
+                } else {
+                    $('#description_error').text('').removeClass('errors')
+                }
+
+                if ($('.errors').length == 0) {
+                    $('#store_form').submit()
+                }
+
+            })
+
+            //show section
+            $(document).on('click', '.update-modal-button', function(e) {
+                e.preventDefault();
+                var title = $(this).data('title');
+                var description = $(this).data('description');
+                var section_id = $(this).data('id');
+                console.log(title);
+                console.log('hey');
+                $('#section_id').val(section_id);
+                $('#edit_title').val(title);
+                $('#edit_description').val(description);
+            });
+
+            //update section
+            $(document).on('click', '#update_section', function(e) {
+                e.preventDefault();
+                var title = $('#edit_title').val();
+                var description = $('#edit_description').val();
+
+                if (title == undefined || title.length < 1) {
+                    $('#edit_title_error').text('Title is required.').addClass('edit_errors')
+                } else {
+                    $('#edit_title_error').text('').removeClass('edit_errors')
+                }
+
+                if (description == undefined || description.length < 1) {
+                    $('#edit_description_error').text('Description is required.').addClass('edit_errors')
+                } else {
+                    $('#edit_description_error').text('').removeClass('edit_errors')
+                }
+
+                if ($('.edit_errors').length == 0) {
+                    $('#update_form').submit()
+                }
+
+            });
+
+
+        });
+    </script>
+@endpush
