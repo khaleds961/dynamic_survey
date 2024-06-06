@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/survey',[SurveyController::class,'getSurvey']);
+Route::get('/survey',[ApiController::class,'getSurvey']);
+Route::post('/submitSurvey',[ApiController::class,'submitSurvey']);

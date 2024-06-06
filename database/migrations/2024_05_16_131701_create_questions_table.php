@@ -17,7 +17,7 @@ return new class extends Migration
             $table->index('section_id');
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->string('question_text')->nullable();
-            $table->enum('question_type',['text','multiple_choices','option'])->nullable();
+            $table->enum('question_type',['text','multiple_choices','option','select'])->nullable();
             $table->integer('order_num')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();

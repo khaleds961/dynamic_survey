@@ -52,6 +52,8 @@
                             Multiple Choice</option>
                         <option value="option" {{ $question->question_type == 'option' ? 'selected' : '' }}>Option
                         </option>
+                        <option value="select" {{ $question->question_type == 'select' ? 'selected' : '' }}>Select
+                        </option>
                     </select>
                 </div>
 

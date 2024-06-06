@@ -53,6 +53,7 @@
                             <option value="multiple_choices"
                                 {{ old('question_type') == 'multiple_choices' ? 'selected' : '' }}>Multiple Choice</option>
                             <option value="option" {{ old('question_type') == 'option' ? 'selected' : '' }}>Option</option>
+                            <option value="select" {{ old('question_type') == 'select' ? 'selected' : '' }}>Select</option>
                         </select>
                         @error('question_type')
                             <span class="text-danger">{{ $message }}</span>

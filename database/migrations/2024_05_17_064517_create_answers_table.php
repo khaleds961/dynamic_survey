@@ -19,10 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger('question_id');
             $table->index('question_id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->unsignedBigInteger('option_id');
+            $table->unsignedBigInteger('option_id')->nullable();
             $table->index('option_id');
             $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade');
-            $table->string('option_text');
+            $table->longText('option_text');
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

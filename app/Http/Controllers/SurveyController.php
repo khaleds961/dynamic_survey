@@ -113,7 +113,7 @@ class SurveyController extends Controller
 
                 // Resize and compress the image using Intervention Image
                 $imageResized = Image::make($logo->getRealPath());
-                $imageResized->resize(800, null, function ($constraint) {
+                $imageResized->resize(null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 // Save the image to the public storage
@@ -136,7 +136,7 @@ class SurveyController extends Controller
 
                 // Resize and compress the image using Intervention Image
                 $imageResized = Image::make($backgroundImage->getRealPath());
-                $imageResized->resize(800, null, function ($constraint) {
+                $imageResized->resize(null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 // Save the image to the public storage
@@ -235,7 +235,7 @@ class SurveyController extends Controller
                 $path = 'images/logos/logo';
                 // Resize and compress the image using Intervention Image
                 $imageResized = Image::make($logo->getRealPath());
-                $imageResized->resize(800, null, function ($constraint) {
+                $imageResized->resize(null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 // Save the image to the public storage
@@ -252,7 +252,7 @@ class SurveyController extends Controller
                 $path = 'images/backgroundImages/background';
                 // Resize and compress the image using Intervention Image
                 $imageResized = Image::make($backgroundImage->getRealPath());
-                $imageResized->resize(800, null, function ($constraint) {
+                $imageResized->resize(null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 // Save the image to the public storage
@@ -295,17 +295,4 @@ class SurveyController extends Controller
         }
     }
 
-    public function getSurvey(Request $request)
-    {
-        try {
-            $survey_id = $request->id;
-            $survey = Survey::with([
-                'property',
-                'sections.questions.options'
-            ])->findOrFail($survey_id);
-            return response()->json($survey);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => 'Cannot find this model']);
-        }
-    }
 }

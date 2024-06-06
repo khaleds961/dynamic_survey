@@ -81,34 +81,57 @@
                         <small class="form-text text-muted">Choose a main Color for your survey.</small>
                     </div>
 
-                    <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="font-family-select">Choose a font family:</label>
-                        <select id="font-family-select" class="form-control" name="fontFamily">
-                            @foreach ($fonts as $font)
-                                <option value="{{ $font['value'] }}">
-                                    {{ $font['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
 
-                    <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <div class="col-md-4">
-                            <label>Make it Wizard Survey.</label>
+                    {{-- col4 --}}
+                    <div class="d-md-flex align-items-center">
+                        <div class="w-100 mb-3">
+                            <label for="font-family-select">Choose a font family:</label>
+                            <select id="font-family-select" class="form-control" name="fontFamily">
+                                @foreach ($fonts as $font)
+                                    <option value="{{ $font['value'] }}">
+                                        {{ $font['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="col-md-8">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input primary" type="radio" name="wizard"
-                                    id="success2-radio" value="1">
-                                <label class="form-check-label" for="success2-radio">Yes</label>
+
+                        <div class="w-100 mb-3 mx-4">
+                            <div class="col-md-4">
+                                <label>Make it Wizard Survey.</label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input primary" type="radio" name="wizard"
-                                    id="success3-radio" value="0" checked>
-                                <label class="form-check-label" for="success3-radio">No</label>
+                            <div class="col-md-8">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input primary" type="radio" name="wizard"
+                                        id="success2-radio" value="1">
+                                    <label class="form-check-label" for="success2-radio">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input primary" type="radio" name="wizard"
+                                        id="success3-radio" value="0" checked>
+                                    <label class="form-check-label" for="success3-radio">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-100 mb-3">
+                            <div class="col-md-4">
+                                <label>Participant Info Required </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input primary" type="radio" name="show_participant"
+                                        id="success2-radio" value="1">
+                                    <label class="form-check-label" for="success2-radio">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input primary" type="radio" name="wizard"
+                                        id="success3-radio" value="0" checked>
+                                    <label class="form-check-label" for="success3-radio">No</label>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {{-- col4 --}}
 
                     <div class="form-group col-12 mb-3">
                         <label for="description">Description</label>

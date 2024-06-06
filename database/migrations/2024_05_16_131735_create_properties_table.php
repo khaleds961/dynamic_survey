@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('survey_id');
             $table->index('survey_id');
             $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
+            $table->boolean('show_personal')->default(true);
             $table->text('logo')->nullable();
             $table->string('backgroundColor')->nullable();
             $table->text('backgroundImage')->nullable();

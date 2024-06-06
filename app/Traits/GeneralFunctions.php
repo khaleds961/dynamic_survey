@@ -34,7 +34,7 @@ trait GeneralFunctions
         }
         // Resize and compress the image using Intervention Image
         $imageResized = Image::make($image->getRealPath());
-        $imageResized->resize(800, null, function ($constraint) {
+        $imageResized->resize(null, function ($constraint) {
             $constraint->aspectRatio();
         });
         // Save the image to the public storage

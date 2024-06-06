@@ -1,5 +1,8 @@
 @charset "UTF-8";
 @import url(https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;display=swap);
+:root {
+    --maincolor: #1e90ff;
+  }
 
 /*!
  * Bootstrap  v5.3.0-alpha1 (https://getbootstrap.com/)
@@ -43138,10 +43141,8 @@ html[dir=rtl] .timeline-widget .timeline-item .timeline-time {
 }
 
 .sidebar-nav ul .sidebar-item .sidebar-link:hover {
-    /* background-color: rgba(93, 135, 255, .1);
-    color: #5d87ff; */
-    /* background-color: #fec482 !important; */
-    color: #E6E6FA !important;
+    background-color: #E6E6FA !important;
+    color: blueviolet !important;
 }
 
 .sidebar-nav ul .sidebar-item .sidebar-link:hover.has-arrow::after {

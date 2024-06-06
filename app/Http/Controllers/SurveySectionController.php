@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
+
 
 class SurveySectionController extends Controller
 {
@@ -44,7 +46,11 @@ class SurveySectionController extends Controller
                     return $row->title ? $row->title : '';
                 })
                 ->addColumn('description', function ($row) {
-                    return $row->description ? $row->description : '';
+                    if (strlen($row->description) > 60) {
+                        return Str::limit($row->description, 60);
+                    } else {
+                        return $row->description ? $row->description : '';
+                    }
                 })
                 ->addColumn('order_num', function ($row) {
                     return $row->order_num;

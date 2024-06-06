@@ -44,11 +44,16 @@ class QuestionController extends Controller
                     return $row->order_num ? $row->order_num : 0;
                 })
                 ->addColumn('question_type', function ($row) {
-                    return $row->question_type == 'text'
-                        ? 'Text'
-                        : ($row->question_type == 'multiple_choices'
-                            ? 'Multiple Choices'
-                            : 'Option');
+                    switch ($row->question_type) {
+                        case 'text':
+                            return 'Text';
+                        case 'multiple_choices':
+                            return 'Multiple Choices';
+                        case 'select':
+                            return 'Select';
+                        default:
+                            return 'Option';
+                    }
                 })
                 ->addColumn('question_text', function ($row) {
                     if ($row->question_text && strlen($row->question_text) > 60) {
@@ -110,11 +115,16 @@ class QuestionController extends Controller
                     return $row->order_num ? $row->order_num : 0;
                 })
                 ->addColumn('question_type', function ($row) {
-                    return $row->question_type == 'text'
-                        ? 'Text'
-                        : ($row->question_type == 'multiple_choices'
-                            ? 'Multiple Choices'
-                            : 'Option');
+                    switch ($row->question_type) {
+                        case 'text':
+                            return 'Text';
+                        case 'multiple_choices':
+                            return 'Multiple Choices';
+                        case 'select':
+                            return 'Select';
+                        default:
+                            return 'Option';
+                    }
                 })
                 ->addColumn('is_active', function ($row) {
                     $action = "is_active";

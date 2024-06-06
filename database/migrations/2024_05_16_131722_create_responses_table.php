@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('survey_id');
             $table->index('survey_id');
             $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
-            $table->unsignedBigInteger('participant_id');
+            $table->unsignedBigInteger('participant_id')->nullable();
             $table->index('participant_id');
             $table->foreign('participant_id')->references('id')->on('participants')->onDelete('cascade');
             $table->boolean('is_active')->default(true);

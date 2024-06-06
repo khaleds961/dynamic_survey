@@ -6,6 +6,12 @@
     /* Align text automatically left/right*/
   }
 
+  .personal-info{
+    background-color:#1d1160;
+    color:white;
+    font-size: 16px;
+  }
+
 .button_style {
     background-color: #292562 !important;
     color: aliceblue !important;

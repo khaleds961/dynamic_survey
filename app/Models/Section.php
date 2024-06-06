@@ -25,8 +25,6 @@ class Section extends Model
             }
         });
 
-        // static::deleted(function ($section) {
-        // });
     }
 
     public function questions()

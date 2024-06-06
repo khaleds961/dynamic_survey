@@ -36,14 +36,22 @@ class Survey extends Model
         });
     }
 
+
     public function property()
     {
         return $this->hasOne(Property::class);
     }
 
+    public function responses()
+    {
+        return $this->hasMany(Response::class);
+    }
+
     // Define the many-to-many relationship with Section
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'survey_sections', 'survey_id', 'section_id');
+        return $this->belongsToMany(Section::class, 'survey_sections', 'survey_id', 'section_id')
+            ->select('*', 'order_num')->orderBy('order_num', 'asc')
+            ->wherePivot('is_active', 1);
     }
 }

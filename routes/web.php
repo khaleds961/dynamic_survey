@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\OptionController;
+use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\SurveySectionController;
@@ -75,6 +77,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/options/edit', [OptionController::class, 'edit'])->name('options.edit');
     Route::post('/options/update', [OptionController::class, 'update'])->name('options.update');
     Route::get('/question_options', [OptionController::class, 'question_options'])->name('options.question_options');
+
+    //Responses
+    Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');
+    Route::get('/participants/show', [ParticipantController::class, 'show'])->name('participants.show');
+
 
     //Global
     Route::post('/change_status', [GlobalController::class, 'change_status'])->name('change_status');

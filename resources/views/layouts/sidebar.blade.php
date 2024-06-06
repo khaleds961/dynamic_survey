@@ -20,6 +20,7 @@
                 <x-sidebar-item :routes="['sections.index', 'sections.edit', 'sections.create','sections.show']" icon="ti ti-box-model" title="Sections" />
                 <x-sidebar-item :routes="['questions.index', 'questions.edit', 'questions.create','questions.show']" icon="ti ti-message-question" title="Questions" />
                 <x-sidebar-item :routes="['options.index', 'options.edit', 'options.create']" icon="ti ti-circles-relation" title="Options" />
+                <x-sidebar-item :routes="['participants.index','participants.show']" icon="ti ti-brand-campaignmonitor" title="Participants" />
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
