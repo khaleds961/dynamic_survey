@@ -2,26 +2,6 @@
 @section('title', 'Show')
 @section('content')
 
-    @php
-        $fonts = [
-            ['name' => 'Arial', 'value' => 'Arial, sans-serif'],
-            ['name' => 'Times New Roman', 'value' => 'Times New Roman'],
-            ['name' => 'Courier New', 'value' => 'Courier New, Courier, monospace, sans-serif'],
-            ['name' => 'Georgia', 'value' => 'Georgia, serif'],
-            ['name' => 'Trebuchet MS', 'value' => 'Trebuchet MS, Helvetica, sans-serif'],
-            ['name' => 'Verdana', 'value' => 'Verdana, sans-serif'],
-        ];
-
-        $lang = isset($survey->property->language) ? $survey->property->language : '';
-        $logo = isset($survey->property->logo)
-            ? asset('storage/' . $survey->property->logo)
-            : asset('storage/images/not-av.png');
-        $backgroundImage = isset($survey->property->backgroundImage)
-            ? asset('storage/' . $survey->property->backgroundImage)
-            : asset('storage/images/not-av.png');
-
-    @endphp
-
     <!-- Flash message -->
     @if (session('success'))
         <div id="flash-message" class="btn alert alert-success">
@@ -49,9 +29,16 @@
         <div class="my-4">
             <div class="row">
                 <div class="form-group col-6 mb-3">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" aria-describedby="titleHelp"
-                        placeholder="Enter Title" name="title" value="{{ $section->title }}" disabled>
+                    <label for="title_ar">Title Ar</label>
+                    <input type="text" class="form-control" id="title_ar" aria-describedby="titleHelp"
+                        placeholder="Enter Title" name="title_ar" value="{{ $section->title_ar }}" disabled>
+                    <br />
+                </div>
+
+                <div class="form-group col-6 mb-3">
+                    <label for="title_en">Title En</label>
+                    <input type="text" class="form-control" id="title_en" aria-describedby="titleHelp"
+                        placeholder="Enter Title" name="title_en" value="{{ $section->title_en }}" disabled>
                     <br />
                 </div>
 
@@ -59,8 +46,13 @@
                 <input type="hidden" name="section_id" value="{{ $section->id }}">
 
                 <div class="form-group col-6 mb-3">
-                    <label for="description">Description</label>
-                    <textarea class="form-control resize-none" id="description" rows="3" name="description" disabled>{{ old('description', $section->description) }}</textarea>
+                    <label for="description_ar">Description Ar</label>
+                    <textarea class="form-control resize-none" id="description_ar" rows="3" name="description_ar" disabled>{{ old('description_ar', $section->description_ar) }}</textarea>
+                </div>
+
+                <div class="form-group col-6 mb-3">
+                    <label for="description_en">Description En</label>
+                    <textarea class="form-control resize-none" id="description_en" rows="3" name="description_en" disabled>{{ old('description_en', $section->description_en) }}</textarea>
                 </div>
 
             </div>
@@ -90,7 +82,10 @@
                                                 <h6 class="fs-4 fw-semibold mb-0 text-uppercase">question type</h6>
                                             </th>
                                             <th>
-                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">question text</h6>
+                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">question text ar</h6>
+                                            </th>
+                                            <th>
+                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">question text en</h6>
                                             </th>
                                             <th>
                                                 <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
@@ -127,8 +122,11 @@
         $(document).ready(function() {
 
             //remove white spaces from description
-            var description = $('#description').val().trim();
-            $('#description').val(description);
+            var description_ar = $('#description_ar').val().trim();
+            $('#description_ar').val(description_ar);
+            //remove white spaces from description
+            var description_en = $('#description_en').val().trim();
+            $('#description_en').val(description_en);
 
             var table = $('#questions-list').DataTable({
                 processing: false,
@@ -148,8 +146,12 @@
                         name: 'question_type'
                     },
                     {
-                        data: "question_text",
-                        name: 'question_text'
+                        data: "question_text_ar",
+                        name: 'question_text_ar'
+                    },
+                    {
+                        data: "question_text_en",
+                        name: 'question_text_en'
                     },
                     {
                         data: 'is_active',

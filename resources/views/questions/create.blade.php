@@ -34,7 +34,7 @@
                             @foreach ($sections as $section)
                                 <option value="{{ $section->id }}"
                                     {{ old('section_id', $section_id) == $section->id ? 'selected' : '' }}>
-                                    {{ $section->title }}
+                                    {{ $section->title_en ? $section->title_en : $section->title_ar }}
                                 </option>
                             @endforeach
                         </select>
@@ -61,11 +61,35 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="question_text">Question Text</label><span class="text-danger">*</span>
-                        <textarea class="form-control resize-none" id="question_text" rows="3" name="question_text"></textarea>
-                        @error('question_text')
+                        <label for="question_text_ar">Question Text Ar</label><span class="text-danger">*</span>
+                        <textarea class="form-control resize-none" id="question_text_ar" rows="3" name="question_text_ar">{{old('question_text_ar')}}</textarea>
+                        @error('question_text_ar')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-6 mb-3">
+                        <label for="question_text_en">Question Text En</label><span class="text-danger">*</span>
+                        <textarea class="form-control resize-none" id="question_text_en" rows="3" name="question_text_en">{{old('question_text_en')}}</textarea>
+                        @error('question_text_en')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="col-md-12">
+                            <label>Question Required</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input primary" type="radio" name="required" id="success2-radio" value="1" {{ old('required') == 1 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="success2-radio">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input primary" type="radio" name="required" id="success3-radio" value="0" {{ old('required') == 0 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="success3-radio">No</label>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

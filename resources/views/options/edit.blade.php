@@ -36,7 +36,8 @@
                             @foreach ($questions as $question)
                                 <option value="{{ $question->id }}"
                                     {{ old('question_id', $option->question_id) == $question->id ? 'selected' : '' }}>
-                                    {{ $question->question_text }}</option>
+                                    {{ $question->question_text_ar ? $question->question_text_ar . ' - ' . $question->question_text_en : $question->question_text_en }}
+                                </option>
                             @endforeach
                         </select>
                         <small id="question_idHelp" class="form-text text-muted">Enter a proper Question.</small>
@@ -49,12 +50,18 @@
                     <input type="hidden" value="{{ $option->id }}" name="id">
                     <input type="hidden" value="{{ $question_id_req }}" name="question_id_req">
 
-
+                    <div class="form-group col-6 mb-3">
+                        <label for="option_text_ar">Option Text Ar</label><span class="text-danger">*</span>
+                        <textarea class="form-control resize-none" id="option_text_ar" rows="3" name="option_text_ar" dir="auto">{{ old('option_text_ar', $option->option_text_ar) }}</textarea>
+                        @error('option_text_ar')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="form-group col-6 mb-3">
-                        <label for="option_text">Option Text</label><span class="text-danger">*</span>
-                        <textarea class="form-control resize-none" id="option_text" rows="3" name="option_text" dir="auto">{{ old('option_text', $option->option_text) }}</textarea>
-                        @error('option_text')
+                        <label for="option_text_en">Option Text En</label><span class="text-danger">*</span>
+                        <textarea class="form-control resize-none" id="option_text_en" rows="3" name="option_text_en" dir="auto">{{ old('option_text_en', $option->option_text_en) }}</textarea>
+                        @error('option_text_en')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -89,8 +96,13 @@
             getImages()
 
             //remove white spaces from description
-            var question_text = $('#question_text').val().trim();
-            $('#question_text').val(question_text);
+            var question_text_ar = $('#question_text_ar').val().trim();
+            $('#question_text_ar').val(question_text_ar);
+
+            //remove white spaces from description
+            var question_text_en = $('#question_text_en').val().trim();
+            $('#question_text_en').val(question_text_en);
         });
+        
     </script>
 @endpush

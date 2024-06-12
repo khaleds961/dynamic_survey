@@ -19,19 +19,22 @@ class ParticipantController extends Controller
         if ($request->ajax()) {
             $query = Response::leftJoin('participants', 'participants.id', 'participant_id')
                 ->join('surveys', 'surveys.id', 'survey_id')
-                ->select('responses.id', 'participants.name', 'participants.email', 'surveys.title as survey');
+                ->select('responses.id', 'participants.name', 'participants.email', 'surveys.title_en as survey_en','surveys.title_ar as survey_ar');
             $table = DataTables::eloquent($query)
-                ->addColumn('id', function ($row) {
+                ->editColumn('id', function ($row) {
                     return $row->id ? $row->id : '';
                 })
-                ->addColumn('name', function ($row) {
+                ->editColumn('name', function ($row) {
                     return $row->name ? $row->name : '<span class="text-danger">SUBMITTED ANONYMOUSLY</span>';
                 })
-                ->addColumn('email', function ($row) {
+                ->editColumn('email', function ($row) {
                     return $row->email ? $row->email : '--';
                 })
-                ->addColumn('survey', function ($row) {
-                    return $row->survey ? $row->survey : '';
+                ->editColumn('survey_ar', function ($row) {
+                    return $row->survey_ar ? $row->survey_ar : '';
+                })
+                ->editColumn('survey_en', function ($row) {
+                    return $row->survey_en ? $row->survey_en : '';
                 })
                 ->addColumn('action', function ($row) {
                     $id = $row->id;
@@ -76,11 +79,13 @@ class ParticipantController extends Controller
                 ->leftJoin('participants', 'participants.id', 'participant_id')
                 ->select(
                     'questions.id as question_id',
-                    'questions.question_text',
+                    'questions.question_text_en',
+                    'questions.question_text_ar',
                     'participants.name',
                     'participants.email',
                     'answers.option_text',
-                    'surveys.title as survey'
+                    'surveys.title_en as survey_en',
+                    'surveys.title_ar as survey_ar'
                 )
                 ->where('responses.id', $id)
                 ->get()

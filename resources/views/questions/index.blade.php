@@ -47,13 +47,19 @@
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">#</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Section</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Section Ar</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Section En</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question Type</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question Text</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question Text Ar</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question Text En</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
@@ -67,6 +73,8 @@
                             <tbody>
                                 <!-- start row -->
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -96,22 +104,34 @@
                 scrollCollapse: true,
                 paging: true,
                 responsive: true,
-                ajax: "{{route('questions.index')}}",
+                ajax: "{{ route('questions.index') }}",
                 columns: [{
                         data: "id",
                         id: 'id'
                     },
                     {
-                        data: "section",
-                        name: 'section'
+                        data: "section_ar",
+                        name: 'section_ar',
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        data: "section_en",
+                        name: 'section_en',
+                        searchable: false,
+                        orderable: false
                     },
                     {
                         data: "question_type",
                         name: 'question_type'
                     },
                     {
-                        data: "question_text",
-                        name: 'question_text'
+                        data: "question_text_ar",
+                        name: 'question_text_ar'
+                    },
+                    {
+                        data: "question_text_en",
+                        name: 'question_text_en'
                     },
                     {
                         data: 'is_active',
@@ -126,6 +146,7 @@
                         orderable: false
                     },
                 ],
+                order: [0, 'desc']
             });
 
         });

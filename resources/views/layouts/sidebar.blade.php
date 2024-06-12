@@ -16,7 +16,7 @@
         <nav class="sidebar-nav scroll-sidebar mt-3" data-simplebar>
             <ul id="sidebarnav">
                 <x-sidebar-item :routes="['index','users.index', 'users.edit', 'users.create', 'users.show','users.create']" icon="ti ti-users" title="Users" />
-                <x-sidebar-item :routes="['surveys.index', 'surveys.edit', 'surveys.create', 'surveys.show','surveysections.create']" icon="ti ti-gauge" title="Surveys" />
+                <x-sidebar-item :routes="['surveys.index', 'surveys.edit', 'surveys.create', 'surveys.show','surveysections.create','surveysections.edit']" icon="ti ti-gauge" title="Surveys" />
                 <x-sidebar-item :routes="['sections.index', 'sections.edit', 'sections.create','sections.show']" icon="ti ti-box-model" title="Sections" />
                 <x-sidebar-item :routes="['questions.index', 'questions.edit', 'questions.create','questions.show']" icon="ti ti-message-question" title="Questions" />
                 <x-sidebar-item :routes="['options.index', 'options.edit', 'options.create']" icon="ti ti-circles-relation" title="Options" />

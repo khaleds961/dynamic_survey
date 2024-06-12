@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('mainColor')->nullable();
             $table->string('fontFamily')->nullable();
             $table->boolean('wizard')->default(false);
-            $table->enum('language',['ar','en']);
-            $table->longText('footer');
+            $table->longText('footer_ar')->nullable();
+            $table->longText('footer_en')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

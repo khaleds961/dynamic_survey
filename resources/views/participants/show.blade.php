@@ -6,7 +6,8 @@
         $answer = $answers->first();
         $name = isset($answer[0]['name']) ? $answer[0]['name'] : 'SUBMITTED ANONYMOUSLY';
         $email = $answer[0]['email'] ? $answer[0]['email'] : 'SUBMITTED ANONYMOUSLY';
-        $survey = $answer[0]['survey'];
+        $survey_ar = $answer[0]['survey_ar'];
+        $survey_en = $answer[0]['survey_en'];
     @endphp
 
     {{-- BreadCrumbs --}}
@@ -33,14 +34,16 @@
                     <div class="col-12">
 
                         <div class="text-white mx-1 p-2 my-3 row rounded personal-info">
-                            <div class="text-white col-12 col-md-4 border p-2">Name: {{$name}}</div>
-                            <div class="text-white col-12 col-md-4 border p-2">Email: {{$email}}</div>
-                            <div class="text-white col-12 col-md-4 border p-2">Survey Title: {{$survey}}</div>
+                            <div class="text-white col-12 col-md-4 border p-2">Name: {{ $name }}</div>
+                            <div class="text-white col-12 col-md-4 border p-2">Email: {{ $email }}</div>
+                            <div class="text-white col-12 col-md-4 border p-2">Survey Title:
+                                {{ $survey_ar ? $survey_ar . ' - ' . $survey_en : $survey_en }}</div>
                         </div>
 
                         @foreach ($answers as $questionId => $groupedAnswers)
                             <div class="card p-4" style="background-color: #E6E6FA">
-                                <h4 class="text-dark">{{ $groupedAnswers->first()->question_text }}</h4>
+                                <h4 class="text-dark">
+                                    {{ $groupedAnswers->first()->question_text_ar ? $groupedAnswers->first()->question_text_ar .' - '. $groupedAnswers->first()->question_text_en : $groupedAnswers->first()->question_text_en}}</h4>
                                 @foreach ($groupedAnswers as $answer)
                                     <h5 class="text-dark">- {{ $answer->option_text }}</h5>
                                 @endforeach
@@ -54,5 +57,8 @@
             </div>
         </div>
     </div>
+
+    <hr>
+
 
 @endsection

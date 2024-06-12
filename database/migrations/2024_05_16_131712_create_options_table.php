@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('question_id');
             $table->index('question_id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->string('option_text')->nullable();
+            $table->text('option_text_en')->nullable();
+            $table->text('option_text_ar')->nullable();
             $table->text('icon')->nullable();
             $table->integer('order_num')->nullable();
             $table->boolean('is_active')->default(true);

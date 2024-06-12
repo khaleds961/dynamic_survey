@@ -27,8 +27,10 @@ class SurveySectionController extends Controller
                     ->where('surveys.is_active', 1)
                     ->select(
                         'sections.id',
-                        'sections.title',
-                        'sections.description',
+                        'sections.title_ar',
+                        'sections.title_en',
+                        'sections.description_ar',
+                        'sections.description_en',
                         'survey_sections.order_num',
                         'survey_sections.id as survey_section_id',
                         'survey_sections.survey_id',
@@ -42,14 +44,24 @@ class SurveySectionController extends Controller
                 ->addColumn('id', function ($row) {
                     return $row->survey_section_id ? $row->survey_section_id : '';
                 })
-                ->addColumn('title', function ($row) {
-                    return $row->title ? $row->title : '';
+                ->addColumn('title_ar', function ($row) {
+                    return $row->title_ar ? $row->title_ar : '';
                 })
-                ->addColumn('description', function ($row) {
-                    if (strlen($row->description) > 60) {
-                        return Str::limit($row->description, 60);
+                ->addColumn('title_en', function ($row) {
+                    return $row->title_en ? $row->title_en : '';
+                })
+                ->addColumn('description_ar', function ($row) {
+                    if (strlen($row->description_ar) > 60) {
+                        return Str::limit($row->description_ar, 60);
                     } else {
-                        return $row->description ? $row->description : '';
+                        return $row->description_ar ? $row->description_ar : '';
+                    }
+                })
+                ->addColumn('description_en', function ($row) {
+                    if (strlen($row->description_en) > 60) {
+                        return Str::limit($row->description_en, 60);
+                    } else {
+                        return $row->description_en ? $row->description_en : '';
                     }
                 })
                 ->addColumn('order_num', function ($row) {

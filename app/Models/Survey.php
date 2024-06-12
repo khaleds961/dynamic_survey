@@ -12,8 +12,10 @@ class Survey extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'title',
-        'description',
+        'title_ar',
+        'title_en',
+        'description_ar',
+        'description_en',
         'user_id',
         'date',
         'deleted_at'

@@ -11,8 +11,10 @@ class Question extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'section_id',
-        'question_text',
+        'question_text_ar',
+        'question_text_en',
         'question_type',
+        'required',
         'order_num',
         'is_active',
         'deleted_at'

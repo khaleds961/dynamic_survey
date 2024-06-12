@@ -3,9 +3,9 @@
     <i class="ti ti-eye fs-6"></i>
 </a>
 
-<a class="text-dark update-modal-button" data-bs-toggle="modal" data-bs-target="#updateEventModal"
-    data-id="{{ $id }}" data-table_name="{{ $table_name }}" style="cursor: pointer"
-    data-title="{{ $row->title }}" data-description="{{ $row->description }}">
+<a class="text-dark update-modal-butto" href="{{ $editRoute }}" data-id="{{ $id }}"
+    data-table_name="{{ $table_name }}" style="cursor: pointer" data-title="{{ $row->title }}"
+    data-description="{{ $row->description }}">
     <i class="ti ti-pencil fs-6"></i>
 </a>
 

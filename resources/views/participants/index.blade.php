@@ -44,7 +44,10 @@
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">email</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">survey</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">survey ar</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">survey en</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">action</h6>
@@ -55,6 +58,7 @@
                             <tbody>
                                 <!-- start row -->
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -98,8 +102,12 @@
                         name: 'email'
                     },
                     {
-                        data: "survey",
-                        name: 'survey'
+                        data: "survey_ar",
+                        name: 'survey_ar'
+                    },
+                    {
+                        data: "survey_en",
+                        name: 'survey_en'
                     },
                     {
                         data: 'action',
@@ -108,6 +116,7 @@
                         orderable: false
                     },
                 ],
+                order: [[0, 'desc']]
             });
 
         });

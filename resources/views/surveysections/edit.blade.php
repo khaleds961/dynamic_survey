@@ -30,7 +30,9 @@
                         <label for="text-direction">Sections</label>
                         <select class="form-control" id="text-direction" name="section_id">
                             @foreach ($sections as $section)
-                            <option value="{{$section->id}}" {{ request()->query('section_id') == $section->id ? 'selected' : '' }}>{{$section->title}}</option>
+                            <option value="{{$section->id}}" {{ request()->query('section_id') == $section->id ? 'selected' : '' }}>
+                                {{$section->title_ar ? $section->title_ar.' - '.$section->title_en : $section->title_en}}
+                            </option>
                             @endforeach
                         </select>
                         <small>update Section.</small>

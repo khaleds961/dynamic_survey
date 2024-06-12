@@ -16,10 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id');
             $table->index('section_id');
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
-            $table->string('question_text')->nullable();
+            $table->text('question_text_ar')->nullable();
+            $table->text('question_text_en')->nullable();
             $table->enum('question_type',['text','multiple_choices','option','select'])->nullable();
             $table->integer('order_num')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('required')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

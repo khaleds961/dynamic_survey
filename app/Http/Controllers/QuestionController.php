@@ -27,23 +27,27 @@ class QuestionController extends Controller
         if ($request->ajax()) {
             $query = Question::with('section');
             $table = DataTables::eloquent($query)
-                ->addColumn('id', function ($row) {
+                ->editColumn('id', function ($row) {
                     return $row->id ? $row->id : '';
                 })
                 ->addColumn('section_id', function ($row) {
                     return $row->section_id ? $row->section_id : '';
                 })
-                ->addColumn('section', function ($row) {
-                    if ($row->section && $row->section->title) {
-                        return $row->section->title;
+                ->addColumn('section_en', function ($row) {
+                    if ($row->section && $row->section->title_en) {
+                        return $row->section->title_en;
                     } else {
                         return '';
                     }
                 })
-                ->addColumn('order_num', function ($row) {
-                    return $row->order_num ? $row->order_num : 0;
+                ->addColumn('section_ar', function ($row) {
+                    if ($row->section && $row->section->title_ar) {
+                        return $row->section->title_ar;
+                    } else {
+                        return '';
+                    }
                 })
-                ->addColumn('question_type', function ($row) {
+                ->editColumn('question_type', function ($row) {
                     switch ($row->question_type) {
                         case 'text':
                             return 'Text';
@@ -55,11 +59,18 @@ class QuestionController extends Controller
                             return 'Option';
                     }
                 })
-                ->addColumn('question_text', function ($row) {
-                    if ($row->question_text && strlen($row->question_text) > 60) {
-                        return Str::limit($row->question_text, 60);
+                ->editColumn('question_text_ar', function ($row) {
+                    if ($row->question_text_ar && strlen($row->question_text_ar) > 60) {
+                        return Str::limit($row->question_text_ar, 60);
                     } else {
-                        return $row->question_text;
+                        return $row->question_text_ar;
+                    }
+                })
+                ->editColumn('question_text_en', function ($row) {
+                    if ($row->question_text_en && strlen($row->question_text_en) > 60) {
+                        return Str::limit($row->question_text_en, 60);
+                    } else {
+                        return $row->question_text_en;
                     }
                 })
                 ->addColumn('is_active', function ($row) {
@@ -104,11 +115,18 @@ class QuestionController extends Controller
                         return '';
                     }
                 })
-                ->addColumn('question_text', function ($row) {
-                    if ($row->question_text && strlen($row->question_text) > 60) {
-                        return Str::limit($row->question_text, 60);
+                ->addColumn('question_text_ar', function ($row) {
+                    if ($row->question_text_ar && strlen($row->question_text_ar) > 60) {
+                        return Str::limit($row->question_text_ar, 60);
                     } else {
-                        return $row->question_text;
+                        return $row->question_text_ar;
+                    }
+                })
+                ->addColumn('question_text_en', function ($row) {
+                    if ($row->question_text_en && strlen($row->question_text_en) > 60) {
+                        return Str::limit($row->question_text_en, 60);
+                    } else {
+                        return $row->question_text_en;
                     }
                 })
                 ->addColumn('order_num', function ($row) {
@@ -167,7 +185,8 @@ class QuestionController extends Controller
             $validate = Validator::make($request->all(), [
                 'section_id' => 'required|integer',
                 'question_type' => 'required',
-                'question_text' => 'required|max:255'
+                'question_text_ar' => 'required|max:255',
+                'question_text_en' => 'required|max:255'
             ]);
 
             if ($validate->fails()) {
@@ -179,8 +198,10 @@ class QuestionController extends Controller
             $question = Question::create([
                 'section_id' => $request->section_id,
                 'question_type' => $request->question_type,
-                'question_text' => $request->question_text,
-                'order_num' => $newOrderNum
+                'question_text_ar' => $request->question_text_ar,
+                'question_text_en' => $request->question_text_en,
+                'order_num' => $newOrderNum,
+                'required' => $request->required
             ]);
 
             //here i'm checking whether this storing is coming from a section page or not
@@ -243,7 +264,8 @@ class QuestionController extends Controller
             $validate = Validator::make($request->all(), [
                 'section_id' => 'required|integer',
                 'question_type' => 'required',
-                'question_text' => 'required|max:255'
+                'question_text_ar' => 'required|max:255',
+                'question_text_en' => 'required|max:255',
             ]);
 
             if ($validate->fails()) {
@@ -260,8 +282,10 @@ class QuestionController extends Controller
                 $question->update([
                     'section_id' => $request->section_id,
                     'question_type' => $request->question_type,
-                    'question_text' => $request->question_text,
-                    'order_num' => $newOrderNum
+                    'question_text_ar' => $request->question_text_ar,
+                    'question_text_en' => $request->question_text_en,
+                    'order_num' => $newOrderNum,
+                    'required' => $request->required
                 ]);
                 // Set a flash message
                 session()->flash('success', 'Question successfully updated');

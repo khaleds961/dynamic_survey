@@ -50,10 +50,16 @@
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">icon</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question Ar</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question en</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text ar</h6>
+                                    </th>
+                                    <th>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text en</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
@@ -67,6 +73,8 @@
                             <tbody>
                                 <!-- start row -->
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -99,19 +107,33 @@
                 ajax: "{{ route('options.index') }}",
                 columns: [{
                         data: "id",
-                        id: 'id'
+                        name: 'id'
                     },
                     {
                         data: 'icon',
-                        name: 'icon'
+                        name: 'icon',
+                        searchable: false,
+                        orderable: false
                     },
                     {
-                        data: "question",
-                        name: 'question'
+                        data: "question_ar",
+                        name: 'question_ar',
+                        searchable: false,
+                        orderable: false
                     },
                     {
-                        data: "option_text",
-                        name: 'option_text'
+                        data: "question_en",
+                        name: 'question_en',
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        data: "option_text_ar",
+                        name: 'option_text_ar'
+                    },
+                    {
+                        data: "option_text_en",
+                        name: 'option_text_en'
                     },
                     {
                         data: 'is_active',
@@ -126,7 +148,11 @@
                         orderable: false
                     },
                 ],
+                order: [
+                    [0, 'desc']
+                ],
             });
+
 
         });
     </script>

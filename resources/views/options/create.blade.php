@@ -34,7 +34,7 @@
                             @foreach ($questions as $question)
                                 <option value="{{ $question->id }}"
                                     {{ old('question_id', $question_id_req) == $question->id ? 'selected' : '' }}>
-                                    {{ $question->question_text }}
+                                    {{ $question->question_text_ar ? $question->question_text_ar . ' - ' . $question->question_text_en : $question->question_text_en }}
                                 </option>
                             @endforeach
                         </select>
@@ -47,9 +47,17 @@
                     <input type="hidden" name="question_id_req" value="{{ $question_id_req }}">
 
                     <div class="form-group col-6 mb-3">
-                        <label for="option_text">Question Text</label><span class="text-danger">*</span>
-                        <textarea class="form-control resize-none" id="option_text" rows="3" name="option_text" dir=auto></textarea>
-                        @error('option_text')
+                        <label for="option_text_ar">Option Text Ar</label><span class="text-danger">*</span>
+                        <textarea class="form-control resize-none" id="option_text_ar" rows="3" name="option_text_ar" dir=auto></textarea>
+                        @error('option_text_ar')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-6 mb-3">
+                        <label for="option_text_en">Option Text En</label><span class="text-danger">*</span>
+                        <textarea class="form-control resize-none" id="option_text_en" rows="3" name="option_text_en" dir=auto></textarea>
+                        @error('option_text_en')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>

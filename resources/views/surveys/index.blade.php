@@ -88,10 +88,10 @@
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">logo</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title en</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">language</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title ar</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">main color</h6>
@@ -108,6 +108,7 @@
                             <tbody>
                                 <!-- start row -->
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -161,12 +162,12 @@
                         searchable: false,
                     },
                     {
-                        data: "title",
-                        name: 'title'
+                        data: "title_en",
+                        name: 'title_en'
                     },
                     {
-                        data: 'language',
-                        name: 'language'
+                        data: "title_ar",
+                        name: 'title_ar'
                     },
                     {
                         data: 'mainColor',

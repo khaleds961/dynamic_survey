@@ -81,17 +81,6 @@
                                         @enderror
                                     </div>
 
-
-
-                                    {{-- <div class="mb-4">
-                                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="exampleInputPassword1"
-                                            placeholder="Password" name="password" value="{{ old('password') }}">
-                                        @error('password')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div> --}}
-
                                     <div class="mb-4">
                                         <label for="exampleInputPassword1" class="form-label">Password</label>
                                         <div class="input-group">

@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->string('description')->nullable();
+            $table->string('title_ar')->nullable();
+            $table->string('title_en')->nullable();
+            $table->text('description_ar')->nullable();
+            $table->text('description_en')->nullable();
             $table->unsignedBigInteger('user_id'); // Define the user_id column
             $table->index('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

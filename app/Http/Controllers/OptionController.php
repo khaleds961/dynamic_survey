@@ -29,31 +29,45 @@ class OptionController extends Controller
         if ($request->ajax()) {
             $query = Option::with('question');
             $table = DataTables::eloquent($query)
-                ->addColumn('id', function ($row) {
-                    return $row->id ? $row->id : '';
+                ->editColumn('id', function ($row) {
+                    return $row->id;
                 })
-                ->addColumn('question_id', function ($row) {
+                ->editColumn('question_id', function ($row) {
                     return $row->question_id ? $row->question_id : '';
                 })
-                ->addColumn('icon', function ($row) {
+                ->editColumn('icon', function ($row) {
                     if ($row->icon) {
                         return "<img class='rounded' src='" . asset('storage/' . $row->icon) . "' alt='logo' width='60' height='60' />";
                     } else {
                         return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
                     }
                 })
-                ->addColumn('question', function ($row) {
-                    if ($row->question && $row->question->question_text && strlen($row->question->question_text) > 60) {
-                        return Str::limit($row->question->question_text, 60);
+                ->addColumn('question_ar', function ($row) {
+                    if ($row->question && $row->question->question_text_ar && strlen($row->question->question_text_ar) > 60) {
+                        return Str::limit($row->question->question_text_ar, 60);
                     } else {
-                        return $row->question && $row->question->question_text ? $row->question->question_text : '';
+                        return $row->question && $row->question->question_text_ar ? $row->question->question_text_ar : '';
                     }
                 })
-                ->addColumn('option_text', function ($row) {
-                    if (strlen($row->option_text) > 60) {
-                        return Str::limit($row->option_text, 60);
+                ->addColumn('question_en', function ($row) {
+                    if ($row->question && $row->question->question_text_en && strlen($row->question->question_text_en) > 60) {
+                        return Str::limit($row->question->question_text_en, 60);
                     } else {
-                        return $row->option_text ? $row->option_text : '';
+                        return $row->question && $row->question->question_text_en ? $row->question->question_text_en : '';
+                    }
+                })
+                ->editColumn('option_text_ar', function ($row) {
+                    if (strlen($row->option_text_ar) > 60) {
+                        return Str::limit($row->option_text_ar, 60);
+                    } else {
+                        return $row->option_text_ar ? $row->option_text_ar : '';
+                    }
+                })
+                ->editColumn('option_text_en', function ($row) {
+                    if (strlen($row->option_text_en) > 60) {
+                        return Str::limit($row->option_text_en, 60);
+                    } else {
+                        return $row->option_text_en ? $row->option_text_en : '';
                     }
                 })
                 ->addColumn('is_active', function ($row) {
@@ -95,11 +109,18 @@ class OptionController extends Controller
                         return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
                     }
                 })
-                ->addColumn('option_text', function ($row) {
-                    if (strlen($row->option_text) > 60) {
-                        return Str::limit($row->option_text, 60);
+                ->addColumn('option_text_en', function ($row) {
+                    if (strlen($row->option_text_en) > 60) {
+                        return Str::limit($row->option_text_en, 60);
                     } else {
-                        return $row->option_text ? $row->option_text : '';
+                        return $row->option_text_en ? $row->option_text_en : '';
+                    }
+                })
+                ->addColumn('option_text_ar', function ($row) {
+                    if (strlen($row->option_text_ar) > 60) {
+                        return Str::limit($row->option_text_ar, 60);
+                    } else {
+                        return $row->option_text_ar ? $row->option_text_ar : '';
                     }
                 })
                 ->addColumn('is_active', function ($row) {
@@ -142,7 +163,8 @@ class OptionController extends Controller
         try {
             $validate = Validator::make($request->all(), [
                 'question_id' => 'required|integer',
-                'option_text' => 'required|max:255',
+                'option_text_ar' => 'required|max:255',
+                'option_text_en' => 'required|max:255',
             ]);
 
             if ($validate->fails()) {
@@ -155,20 +177,21 @@ class OptionController extends Controller
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $path = 'images/icons/icon';
 
-                $imagePath =   $this->uploadImage($image, $imageName, $path);
+                $imagePath = $this->uploadImage($image, $imageName, $path);
             } else {
                 $imagePath = null;
             }
 
             $newOrderNum = $this->arrangeOrderNumber('options', 'question_id', $request->question_id);
 
-
             $option = Option::create([
                 'question_id' => $request->question_id,
-                'option_text' => $request->option_text,
+                'option_text_ar' => $request->option_text_ar,
+                'option_text_en' => $request->option_text_en,
                 'icon' => $imagePath,
                 'order_num' => $newOrderNum
             ]);
+
             //here i'm checking whether this storing is coming from a section page or not
             if ($option && $request->question_id_req != null) {
                 session()->flash('success', 'Question successfully created');
@@ -224,7 +247,8 @@ class OptionController extends Controller
             $validate = Validator::make($request->all(), [
                 'id' => 'required|integer',
                 'question_id' => 'required|integer',
-                'option_text' => 'required|max:255',
+                'option_text_ar' => 'required|max:255',
+                'option_text_en' => 'required|max:255',
             ]);
 
             if ($validate->fails()) {
@@ -259,7 +283,8 @@ class OptionController extends Controller
             // Update the property attributes using mass assignment
             $OptionData = [
                 'question_id' => $request->question_id,
-                'option_text' => $request->option_text,
+                'option_text_ar' => $request->option_text_ar,
+                'option_text_en' => $request->option_text_en,
                 'order_num' => $newOrderNum
             ];
 

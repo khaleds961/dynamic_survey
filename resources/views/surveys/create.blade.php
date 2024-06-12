@@ -36,32 +36,35 @@
                 <div class="row">
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" aria-describedby="titleHelp"
-                            placeholder="Enter Title" name="title" value="{{ old('title') }}">
+                        <label for="title_ar">Title Ar</label>
+                        <input type="text" class="form-control" id="title_ar" aria-describedby="titleHelp"
+                            placeholder="Enter Title" name="title_ar" value="{{ old('title_ar') }}">
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your survey.</small>
                         <br />
-                        @error('title')
+                        @error('title_ar')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="text-direction">Language</label>
-                        <select class="form-control" id="text-direction" name="language">
-                            <option value="en">English</option>
-                            <option value="ar">Arabic</option>
-                        </select>
+                        <label for="title_en">Title En</label>
+                        <input type="text" class="form-control" id="title_en" aria-describedby="titleHelp"
+                            placeholder="Enter Title" name="title_en" value="{{ old('title_en') }}">
+                        <small id="titleHelp" class="form-text text-muted">Enter a clear title for your survey.</small>
+                        <br />
+                        @error('title_en')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="logo">Logo</label>
+                        <label for="logo">Logo <span class="text-danger">(should be without background - PNG,JPG,JPEG)</span></label>
                         <input type="file" name="logo" class="dropify" data-max-file-size="2M"
                             data-allowed-file-extensions="png jpg jpeg">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="backgroundImage">Background Image</label>
+                        <label for="backgroundImage">Background Image <span class="text-danger">(Dimessions-1920px*1080px - PNG,JPG,JPEG)</span></label>
                         <input type="file" name="backgroundImage" class="dropify" data-max-file-size="2M"
                             data-allowed-file-extensions="png jpg jpeg">
                     </div>
@@ -81,10 +84,8 @@
                         <small class="form-text text-muted">Choose a main Color for your survey.</small>
                     </div>
 
-
-                    {{-- col4 --}}
-                    <div class="d-md-flex align-items-center">
-                        <div class="w-100 mb-3">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 mb-3">
                             <label for="font-family-select">Choose a font family:</label>
                             <select id="font-family-select" class="form-control" name="fontFamily">
                                 @foreach ($fonts as $font)
@@ -95,11 +96,11 @@
                             </select>
                         </div>
 
-                        <div class="w-100 mb-3 mx-4">
-                            <div class="col-md-4">
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="col-md-12">
                                 <label>Make it Wizard Survey.</label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input primary" type="radio" name="wizard"
                                         id="success2-radio" value="1">
@@ -113,40 +114,52 @@
                             </div>
                         </div>
 
-                        <div class="w-100 mb-3">
-                            <div class="col-md-4">
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="col-md-12">
                                 <label>Participant Info Required </label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input primary" type="radio" name="show_participant"
+                                    <input class="form-check-input primary" type="radio" name="show_personal"
                                         id="success2-radio" value="1">
                                     <label class="form-check-label" for="success2-radio">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input primary" type="radio" name="wizard"
+                                    <input class="form-check-input primary" type="radio" name="show_personal"
                                         id="success3-radio" value="0" checked>
                                     <label class="form-check-label" for="success3-radio">No</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{-- col4 --}}
 
-                    <div class="form-group col-12 mb-3">
-                        <label for="description">Description</label>
-                        <textarea class="form-control resize-none" id="description" rows="3" name="description"></textarea>
+                    <div class="form-group col-sm-12 col-md-6 mb-3">
+                        <label for="description_ar">Description Ar</label>
+                        <textarea class="form-control resize-none" id="description_ar" rows="3" name="description_ar"></textarea>
                     </div>
 
-                    <div class="form-group col-12 mb-3">
-                        <label for="footer">Footer</label><span class="text-danger">*</span>
-                        <textarea name="footer" id="editor">{{ old('footer') }}</textarea>
+                    <div class="form-group col-sm-12 col-md-6 mb-3">
+                        <label for="description_en">Description En</label>
+                        <textarea class="form-control resize-none" id="description_en" rows="3" name="description_en"></textarea>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-6 mb-3 mb-3">
+                        <label for="footer_ar">Footer Ar</label><span class="text-danger">*</span>
+                        <textarea name="footer_ar" id="editor_ar">{{ old('footer_ar') }}</textarea>
                         <br>
-                        @error('footer')
+                        @error('footer_ar')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
+                    <div class="form-group col-sm-12 col-md-6 mb-3 mb-3">
+                        <label for="footer_en">Footer En</label><span class="text-danger">*</span>
+                        <textarea name="footer_en" id="editor_en">{{ old('footer_en') }}</textarea>
+                        <br>
+                        @error('footer_en')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
 
                 </div>
 
@@ -161,23 +174,10 @@
     <script>
         $(document).ready(function() {
 
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-
-            // ClassicEditor
-            // .create(document.querySelector('#editor'))
-            // .catch(error => {
-            //     console.error(error);
-            // });
-
-
             async function initializeEditor(language) {
 
                 ClassicEditor
-                    .create(document.querySelector('#editor'), {
+                    .create(document.querySelector('#editor_en'), {
                         toolbar: [
                             'heading', '|',
                             'bold', 'italic', '|',
@@ -196,14 +196,37 @@
                     });
             }
 
-            document.getElementById('text-direction').addEventListener('change', function() {
-                const direction = this.value;
-                document.querySelector('.ck-editor__editable').ckeditorInstance.destroy()
-                initializeEditor(direction);
-            });
+            async function initializeEditorAr(language) {
+
+                ClassicEditor
+                    .create(document.querySelector('#editor_ar'), {
+                        toolbar: [
+                            'heading', '|',
+                            'bold', 'italic', '|',
+                            'link', 'bulletedList', 'numberedList', '|',
+                            'blockQuote', 'insertTable', 'undo', 'redo', '|',
+                            'alignment:left', 'alignment:center', 'alignment:right',
+                            'alignment:justify',
+                            'language'
+                        ],
+                        language: language, // UI language
+                        contentsLangDirection: language == 'en' ? 'ltr' :
+                            'rtl' // Text direction for the content
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+            // document.getElementById('text-direction').addEventListener('change', function() {
+            //     const direction = this.value;
+            //     document.querySelector('.ck-editor__editable').ckeditorInstance.destroy()
+            //     initializeEditor(direction);
+            // });
 
             // Initialize the editor with the default direction (LTR)
             initializeEditor('en');
+            initializeEditorAr('ar');
         });
     </script>
 @endpush

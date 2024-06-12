@@ -27,17 +27,25 @@ class SectionController extends Controller
                 $query = Section::query();
             }
             $table = DataTables::eloquent($query)
-                ->addColumn('title', function ($row) {
-                    return $row->title ? $row->title : '';
+                ->editColumn('title_en', function ($row) {
+                    return $row->title_en ? $row->title_en : '';
                 })
-                ->addColumn('description', function ($row) {
-                    if (strlen($row->description) > 60) {
-                        return Str::limit($row->description, 60);
+                ->editColumn('title_ar', function ($row) {
+                    return $row->title_ar ? $row->title_ar : '';
+                })
+                ->editColumn('description_en', function ($row) {
+                    if (strlen($row->description_en) > 60) {
+                        return Str::limit($row->description_en, 60);
                     } else {
-                        return $row->description ? $row->description : '';
+                        return $row->description_en ? $row->description_en : '';
                     }
-                })
-                ->addColumn('is_active', function ($row) {
+                })->editColumn('description_ar', function ($row) {
+                    if (strlen($row->description_ar) > 60) {
+                        return Str::limit($row->description_ar, 60);
+                    } else {
+                        return $row->description_ar ? $row->description_ar : '';
+                    }
+                })->addColumn('is_active', function ($row) {
                     $action = "is_active";
                     $checked_flag = $row->is_active;
                     $id = $row->id;
@@ -51,7 +59,8 @@ class SectionController extends Controller
                     $model = 'Section';
                     $surveyFlag = isset($excludedSurveyId) && $excludedSurveyId !== null;
                     $route = "/sections/show?id=$id";
-                    return view('sections.action', compact('id', 'table_name', 'row', 'model', 'surveyFlag', 'route'));
+                    $editRoute = "/sections/edit?id=$id";
+                    return view('sections.action', compact('id', 'table_name', 'row', 'model', 'surveyFlag', 'route','editRoute'));
                 })
                 ->make(true);
 
@@ -67,7 +76,7 @@ class SectionController extends Controller
      */
     public function create()
     {
-        return view('sections.store');
+        return view('sections.create');
     }
 
     /**
@@ -77,8 +86,10 @@ class SectionController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                'title' => 'required|max:255',
-                'description' => 'required'
+                'title_en' => 'required|max:255',
+                'title_ar' => 'required|max:255',
+                'description_en' => 'required',
+                'description_ar' => 'required'
             ]);
 
             if ($validate->fails()) {
@@ -86,8 +97,10 @@ class SectionController extends Controller
             }
 
             $section = Section::create([
-                'title' => $request->title,
-                'description' => $request->description
+                'title_en' => $request->title_en,
+                'title_ar' => $request->title_ar,
+                'description_en' => $request->description_en,
+                'description_ar' => $request->description_ar
             ]);
 
             if ($section) {
@@ -120,9 +133,17 @@ class SectionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Section $section)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $section = Section::findOrFail($request->id);
+            return view('sections.edit', compact('section'));
+        } catch (Exception $e) {
+            return $e;
+            $message = 'Cannot find the model';
+            $route = route('sections.index');
+            return view('layouts.errors.error404', compact('message', 'route'));
+        }
     }
 
     /**
@@ -132,20 +153,26 @@ class SectionController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                'edit_title' => 'required|max:255',
-                'edit_description' => 'required'
+                'title_en' => 'required|max:255',
+                'title_ar' => 'required|max:255',
+                'description_en' => 'required',
+                'description_ar' => 'required'
             ]);
+
             if ($validate->fails()) {
                 return redirect()->back()->withErrors($validate)->withInput();
             }
             $section = Section::findOrFail($request->id);
             $section->update([
-                'title' => $request->edit_title,
-                'description' => $request->edit_description
+                'title_ar' => $request->title_ar,
+                'title_en' => $request->title_en,
+                'description_ar' => $request->description_ar,
+                'description_en'=> $request->description_en
             ]);
             session()->flash('success', 'Section updated successfully.');
             return redirect()->route('sections.index');
         } catch (Exception $e) {
+            return $e;
             $message = 'Cannot find the model';
             $route = route('sections.index');
             return view('layouts.errors.error404', compact('message', 'route'));

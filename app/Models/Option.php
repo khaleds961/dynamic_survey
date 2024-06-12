@@ -11,7 +11,8 @@ class Option extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'question_id',
-        'option_text',
+        'option_text_ar',
+        'option_text_en',
         'icon',
         'order_num',
         'is_active',

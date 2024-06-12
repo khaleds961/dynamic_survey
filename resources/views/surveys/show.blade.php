@@ -42,24 +42,16 @@
     <div class="row">
         <div class="my-4">
             <div class="row">
-                <div class="form-group col-6 mb-3">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" aria-describedby="titleHelp"
-                        placeholder="Enter Title" name="title" value="{{ $survey->title }}" disabled>
-                    <br />
+                <div class="form-group col-sm-12 col-md-6 mb-3">
+                    <label for="title_ar">Title Ar</label>
+                    <input type="text" class="form-control" id="title_ar" aria-describedby="titleHelp" name="title_ar"
+                        value="{{ old('title_ar', $survey->title_ar) }}" disabled>
                 </div>
 
-                <div class="form-group col-6 mb-3">
-                    <label for="text-direction">Language</label>
-                    <select class="form-control" id="text-direction" name="language" disabled>
-                        <option value="en"
-                            {{ isset($survey->property->language) && $survey->property->language == 'en' ? 'selected' : '' }}>
-                            English</option>
-                        <option value="ar"
-                            {{ isset($survey->property->language) && $survey->property->language == 'ar' ? 'selected' : '' }}>
-                            Arabic
-                        </option>
-                    </select>
+                <div class="form-group col-sm-12 col-md-6 mb-3">
+                    <label for="title_en">Title En</label>
+                    <input type="text" class="form-control" id="title_en" aria-describedby="titleHelp" name="title_en"
+                        value="{{ old('title_en', $survey->title_en) }}" disabled>
                 </div>
 
                 <div class="form-group col-6 mb-3">
@@ -91,28 +83,82 @@
                 {{-- //invisible --}}
                 <input type="hidden" name="id" value="{{ $survey->id }}">
 
-                <div class="form-group col-6 mb-3">
-                    <label for="font-family-select">Choose a font family:</label>
-                    <select id="font-family-select" class="form-control" name="fontFamily" disabled>
-                        @foreach ($fonts as $font)
-                            <option value="{{ $font['value'] }}"
-                                {{ isset($survey->property->fontFamily) && $survey->property->fontFamily == $font['value'] ? 'selected' : '' }}>
-                                {{ $font['name'] }}
-                            </option>
-                        @endforeach
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6 mb-3">
+                        <label for="font-family-select">Choose a font family:</label>
+                        <select id="font-family-select" class="form-control" name="fontFamily" disabled>
+                            @foreach ($fonts as $font)
+                                <option value="{{ $font['value'] }}"
+                                    {{ isset($survey->property->fontFamily) && $survey->property->fontFamily == $font['value'] ? 'selected' : '' }}>
+                                    {{ $font['name'] }}
+                                </option>
+                            @endforeach
 
-                    </select>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-3 mb-3">
+                        <div class="col-12">
+                            <label>Make it Wizard Survey.</label>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input primary" type="radio" name="wizard" id="success2-radio"
+                                    value="1" disabled
+                                    {{ isset($survey->property->wizard) && $survey->property->wizard == 1 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="success2-radio">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input primary" type="radio" name="wizard" id="success3-radio"
+                                    value="0" disabled
+                                    {{ isset($survey->property->wizard) && $survey->property->wizard == 0 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="success3-radio">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <div class="col-md-12">
+                            <label>Participant Info Required </label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input primary" type="radio" name="show_personal"
+                                    id="success2-radio" value="1" disabled
+                                    {{ isset($survey->property->show_personal) && $survey->property->show_personal == 1 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="success2-radio">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input primary" type="radio" name="show_personal"
+                                    id="success3-radio" value="0" disabled
+                                    {{ isset($survey->property->show_personal) && $survey->property->show_personal == 0 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="success3-radio">No</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group col-6 mb-3">
-                    <label for="description">Description</label>
-                    <textarea class="form-control resize-none" id="description" rows="3" name="description" disabled>{{ old('description', $survey->description) }}</textarea>
+                    <label for="description_ar">Description Ar</label>
+                    <textarea class="form-control resize-none" id="description_ar" rows="3" name="description_ar" disabled>{{ old('description_ar', $survey->description_ar) }}</textarea>
                 </div>
 
-                <div class="form-group col-12 mb-3">
-                    <label for="footer">Footer</label><br>
+                <div class="form-group col-6 mb-3">
+                    <label for="description_en">Description En</label>
+                    <textarea class="form-control resize-none" id="description_en" rows="3" name="description_en" disabled>{{ old('description_en', $survey->description_en) }}</textarea>
+                </div>
+
+                <div class="form-group col-12 col-md-6 mb-3">
+                    <label for="footer_ar">Footer Ar</label><br>
                     <div class="border p-4 mt-2">
-                        {!! isset($survey->property->footer) ? old('footer', $survey->property->footer) : '' !!}
+                        {!! isset($survey->property->footer_ar) ? old('footer_ar', $survey->property->footer_ar) : '' !!}
+                    </div>
+                </div>
+
+                <div class="form-group col-12 col-md-6  mb-3">
+                    <label for="footer_en">Footer En</label><br>
+                    <div class="border p-4 mt-2">
+                        {!! isset($survey->property->footer_en) ? old('footer_en', $survey->property->footer_en) : '' !!}
                     </div>
                 </div>
             </div>
@@ -142,10 +188,16 @@
                                                 <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Order</h6>
                                             </th>
                                             <th>
-                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title</h6>
+                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title Ar</h6>
                                             </th>
                                             <th>
-                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">description</h6>
+                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title en</h6>
+                                            </th>
+                                            <th>
+                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">description ar</h6>
+                                            </th>
+                                            <th>
+                                                <h6 class="fs-4 fw-semibold mb-0 text-uppercase">description en</h6>
                                             </th>
                                             <th>
                                                 <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
@@ -165,6 +217,8 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                 </table>
                             </div>
@@ -172,55 +226,6 @@
                         </div>
                     </div>
 
-                    <!-- BEGIN EDIT MODAL -->
-                    <div class="modal fade" id="updateEventModal" tabindex="-1" aria-labelledby="updateEventModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="updateEventModalLabel">
-                                        Update Section
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <form class="modal-body" action="{{ route('sections.update') }}" method="POST"
-                                    id="update_form">
-                                    @csrf
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <label class="form-label d-flex justify-content-between align-items-center">
-                                                <span>Title
-                                                </span>
-                                            </label>
-                                            <input id="edit_title" name="edit_title" type="text"
-                                                class="form-control" />
-                                            <span id="edit_title_error" class="text-danger"></span>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label class="form-label d-flex justify-content-between align-items-center">
-                                                <span>Description
-                                                </span>
-                                            </label>
-                                            <textarea class="form-control resize-none" id="edit_description" rows="3" name="edit_description"></textarea>
-                                            <span id="edit_description_error" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    {{-- //secret --}}
-                                    <input type="hidden" name="id" id="section_id">
-                                    <div class="d-flex justify-content-end my-4">
-                                        <button class="btn btn-primary btn-add-event" id="update_section">
-                                            Update
-                                        </button>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END MODAL -->
                 </div>
 
             </div>
@@ -250,8 +255,12 @@
             getImages();
 
             //remove white spaces from description
-            var description = $('#description').val().trim();
-            $('#description').val(description);
+            var description_en = $('#description_en').val().trim();
+            $('#description_en').val(description_en);
+
+            //remove white spaces from description
+            var description_ar = $('#description_ar').val().trim();
+            $('#description_ar').val(description_ar);
 
             var table = $('#sections-list').DataTable({
                 processing: false, // Disable server-side processing temporarily
@@ -267,12 +276,20 @@
                         name: 'order_num'
                     },
                     {
-                        data: "title",
-                        name: 'title'
+                        data: "title_ar",
+                        name: 'title_ar'
                     },
                     {
-                        data: "description",
-                        name: 'description'
+                        data: "title_en",
+                        name: 'title_en'
+                    },
+                    {
+                        data: "description_ar",
+                        name: 'description_ar'
+                    },
+                    {
+                        data: "description_en",
+                        name: 'description_en'
                     },
                     {
                         data: 'is_active',

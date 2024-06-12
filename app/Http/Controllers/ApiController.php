@@ -20,13 +20,12 @@ class ApiController extends Controller
             $survey = Survey::with([
                 'property',
                 'sections.questions.options'
-            ])->findOrFail($survey_id);
+            ])->where('is_active',1)->findOrFail($survey_id);
             return response()->json($survey);
         } catch (ModelNotFoundException) {
             return response()->json(['message' => 'Cannot find this model']);
         }
     }
-
 
     public function submitSurvey(Request $request)
     {
@@ -42,7 +41,7 @@ class ApiController extends Controller
                         'email' => $request->participant['email']
                     ]);
                 }
-            }else{
+            } else {
                 $participant = null;
             }
 

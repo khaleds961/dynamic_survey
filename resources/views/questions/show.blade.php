@@ -34,7 +34,7 @@
                         @foreach ($sections as $section)
                             <option value="{{ $section->id }}"
                                 {{ $question->section_id == $section->id ? 'selected' : '' }}>
-                                {{ $section->title }}</option>
+                                {{ $section->title_ar ? $section->title_ar : $section->title_en }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -58,8 +58,13 @@
                 </div>
 
                 <div class="form-group col-sm-12 col-md-6 mb-3">
-                    <label for="question_text">Question Text</label><span class="text-danger">*</span>
-                    <textarea class="form-control resize-none" id="question_text" rows="3" name="question_text" readonly disabled>{{ $question->question_text }}</textarea>
+                    <label for="question_text_ar">Question Text Ar</label><span class="text-danger">*</span>
+                    <textarea class="form-control resize-none" id="question_text_ar" rows="3" name="question_text_ar" readonly disabled>{{ $question->question_text_ar }}</textarea>
+                </div>
+
+                <div class="form-group col-sm-12 col-md-6 mb-3">
+                    <label for="question_text_en">Question Text En</label><span class="text-danger">*</span>
+                    <textarea class="form-control resize-none" id="question_text_en" rows="3" name="question_text_en" readonly disabled>{{ $question->question_text_en }}</textarea>
                 </div>
 
                 <div class="row mt-4">
@@ -89,7 +94,10 @@
                                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">icon</h6>
                                                     </th>
                                                     <th>
-                                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text</h6>
+                                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text Ar</h6>
+                                                    </th>
+                                                    <th>
+                                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text En</h6>
                                                     </th>
                                                     <th>
                                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
@@ -103,6 +111,7 @@
                                             <tbody>
                                                 <!-- start row -->
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -128,8 +137,8 @@
     <script>
         $(document).ready(function() {
             //remove white spaces from description
-            var question_text = $('#question_text').val().trim();
-            $('#question_text').val(question_text);
+            var question_text_ar = $('#question_text_ar').val().trim();
+            $('#question_text_ar').val(question_text_ar);
 
             var table = $('#options-list').DataTable({
                 processing: false,
@@ -149,8 +158,12 @@
                         name: 'icon'
                     },
                     {
-                        data: "option_text",
-                        name: 'option_text'
+                        data: "option_text_ar",
+                        name: 'option_text_ar'
+                    },
+                    {
+                        data: "option_text_en",
+                        name: 'option_text_en'
                     },
                     {
                         data: 'is_active',

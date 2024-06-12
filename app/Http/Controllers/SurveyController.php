@@ -4,21 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\Survey;
+use App\Traits\GeneralFunctions;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Intervention\Image\Facades\Image;
 use Yajra\DataTables\Facades\DataTables;
 
 class SurveyController extends Controller
 {
+    use GeneralFunctions;
+
     /**
      * Display a listing of the resource.
      */
@@ -28,17 +27,21 @@ class SurveyController extends Controller
 
             $query = Survey::with('property');
 
-            $table = DataTables::eloquent($query)->addColumn('date', function ($row) {
+            $table = DataTables::eloquent($query)->editColumn('id', function ($row) {
+                return $row->id;
+            })->editColumn('date', function ($row) {
                 return $row->date ? $row->date : '';
-            })->addColumn('title', function ($row) {
-                return $row->title ? $row->title : '';
+            })->editColumn('title_ar', function ($row) {
+                return $row->title_ar ? $row->title_ar : '';
+            })->editColumn('title_en', function ($row) {
+                return $row->title_en ? $row->title_en : '';
             })->addColumn('logo', function ($row) {
                 if ($row->property && $row->property->logo) {
                     return "<img class='rounded' src='" . asset('storage/' . $row->property->logo) . "' alt='logo' width='60' height='60' />";
                 } else {
                     return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
                 }
-            })->addColumn('language', function ($row) {
+            })->editColumn('language', function ($row) {
                 if ($row->property && $row->property->language) {
                     return $row->property->language == 'ar' ? 'Arabic' : 'English';
                 } else {
@@ -57,7 +60,7 @@ class SurveyController extends Controller
                 $title = $row->title;
                 $table_name = 'surveys';
                 return view('layouts.actions.other_action', compact('action', 'checked_flag', 'id', 'title', 'table_name'));
-            })->editColumn('action', function ($row) {
+            })->addColumn('action', function ($row) {
                 $table_name = 'surveys';
                 $id = $row->id;
                 $model = 'Survey';
@@ -87,15 +90,18 @@ class SurveyController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'title' => 'min:3',
-                'footer' => 'min:15'
+                'title_ar' => 'min:3',
+                'title_en' => 'min:3',
             ]);
+            
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             $survey = Survey::create([
-                'title' => $request->title,
-                'description' => $request->description,
+                'title_ar' => $request->title_ar,
+                'title_en' => $request->title_en,
+                'description_ar' => $request->description_ar,
+                'description_en' => $request->description_en,
                 'user_id' => Auth::user()->id,
                 'date' => Carbon::now()
             ]);
@@ -106,23 +112,10 @@ class SurveyController extends Controller
                 $logoName = time() . '.' . $logo->getClientOriginalExtension();
                 $path = 'images/logos/logo';
 
-                //check if folder not exist and create new one
-                if (!File::isDirectory($path)) {
-                    File::makeDirectory($path, 0777, true, true);
-                }
-
-                // Resize and compress the image using Intervention Image
-                $imageResized = Image::make($logo->getRealPath());
-                $imageResized->resize(null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                // Save the image to the public storage
-                Storage::disk('public')->put($path . $logoName, (string) $imageResized->encode());
-                $logoPath = $path . $logoName;
+                $logoPath = $this->uploadImage($logo, $logoName, $path);
             } else {
                 $logoPath = null;
             }
-
 
             if ($request->hasFile('backgroundImage')) {
                 // Handle the uploaded file
@@ -133,15 +126,7 @@ class SurveyController extends Controller
                 if (!File::isDirectory($path)) {
                     File::makeDirectory($path, 0777, true, true);
                 }
-
-                // Resize and compress the image using Intervention Image
-                $imageResized = Image::make($backgroundImage->getRealPath());
-                $imageResized->resize(null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                // Save the image to the public storage
-                Storage::disk('public')->put($path . $backgroundImageName, (string) $imageResized->encode());
-                $backgroundImagePath = $path . $backgroundImageName;
+                $backgroundImagePath =  $this->uploadImage($backgroundImage, $backgroundImageName, $path);
             } else {
                 $backgroundImagePath = null;
             }
@@ -155,8 +140,9 @@ class SurveyController extends Controller
                     'mainColor' => $request->mainColor,
                     'fontFamily' => $request->fontFamily,
                     'wizard' => $request->wizard,
-                    'language' => $request->language,
-                    'footer' => $request->footer,
+                    'footer_ar' => $request->footer_ar,
+                    'footer_en' => $request->footer_en,
+                    'show_personal' => $request->show_personal
                 ]);
             }
 
@@ -165,6 +151,7 @@ class SurveyController extends Controller
                 return redirect()->route('surveys.index');
             }
         } catch (Exception $e) {
+            return $e;
             $route = route('surveys.index');
             return view('layouts.errors.error500', compact('route'));
         }
@@ -209,10 +196,9 @@ class SurveyController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'title' => 'min:3',
-                'footer' => 'min:15'
+                'title_ar' => 'min:3',
+                'title_en' => 'min:3',
             ]);
-
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
@@ -221,43 +207,38 @@ class SurveyController extends Controller
             // Find the survey by ID
             $survey = Survey::findOrFail($request->id);
             $survey->update([
-                'title' => $request->title,
-                'description' => $request->description
+                'title_ar' => $request->title_ar,
+                'title_en' => $request->title_en,
+                'description_ar' => $request->description_ar,
+                'description_en' => $request->description_en
             ]);
 
             // Find the property by survey ID
             $property = Property::where('survey_id', $request->id)->firstOrFail();
+
 
             if ($request->hasFile('editLogo')) {
                 // Handle the uploaded file
                 $logo = $request->file('editLogo');
                 $logoName = time() . '.' . $logo->getClientOriginalExtension();
                 $path = 'images/logos/logo';
-                // Resize and compress the image using Intervention Image
-                $imageResized = Image::make($logo->getRealPath());
-                $imageResized->resize(null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                // Save the image to the public storage
-                Storage::disk('public')->put($path . $logoName, (string) $imageResized->encode());
-                $logoPath = $path . $logoName;
+
+                $logoPath =   $this->uploadImage($logo, $logoName, $path);
             } else {
                 $logoPath = null;
             }
+
 
             if ($request->hasFile('editBackgroundImage')) {
                 // Handle the uploaded file
                 $backgroundImage = $request->file('editBackgroundImage');
                 $backgroundImageName = time() . '.' . $backgroundImage->getClientOriginalExtension();
                 $path = 'images/backgroundImages/background';
-                // Resize and compress the image using Intervention Image
-                $imageResized = Image::make($backgroundImage->getRealPath());
-                $imageResized->resize(null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                // Save the image to the public storage
-                Storage::disk('public')->put($path . $backgroundImageName, (string) $imageResized->encode());
-                $backgroundImagePath = $path . $backgroundImageName;
+
+                if (!File::isDirectory($path)) {
+                    File::makeDirectory($path, 0777, true, true);
+                }
+                $backgroundImagePath =   $this->uploadImage($backgroundImage, $backgroundImageName, $path);
             } else {
                 $backgroundImagePath = null;
             }
@@ -267,9 +248,10 @@ class SurveyController extends Controller
                 'backgroundColor' => $request->backgroundColor,
                 'mainColor' => $request->mainColor,
                 'fontFamily' => $request->fontFamily,
-                'language' => $request->language,
-                'footer' => $request->footer,
+                'footer_ar' => $request->footer_ar,
+                'footer_en' => $request->footer_en,
                 'wizard' => $request->wizard,
+                'show_personal' => $request->show_personal
             ];
 
             if ($logoPath) {
@@ -290,9 +272,10 @@ class SurveyController extends Controller
             $route = route('surveys.index');
             return view('layouts.errors.error404', compact('message', 'route'));
         } catch (Exception $e) {
+            return $e;
+
             $route = route('surveys.index');
             return view('layouts.errors.error500', compact('route'));
         }
     }
-
 }

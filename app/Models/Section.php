@@ -11,8 +11,10 @@ class Section extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'title',
-        'description'
+        'title_en',
+        'title_ar',
+        'description_en',
+        'description_ar'
     ];
 
     protected static function boot()

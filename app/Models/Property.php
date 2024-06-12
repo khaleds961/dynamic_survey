@@ -17,8 +17,9 @@ class Property extends Model
         'mainColor',
         'fontFamily',
         'wizard',
-        'language',
-        'footer',
+        'show_personal',
+        'footer_ar',
+        'footer_en',
         'deleted_at'
     ];
 }
