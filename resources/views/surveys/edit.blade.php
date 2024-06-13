@@ -19,7 +19,7 @@
         $backgroundImage = isset($survey->property->backgroundImage)
             ? asset('storage/' . $survey->property->backgroundImage)
             : asset('storage/images/not-av.png');
-
+            // app/public/
     @endphp
 
     {{-- BreadCrumbs --}}

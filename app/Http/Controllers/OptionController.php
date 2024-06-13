@@ -257,8 +257,8 @@ class OptionController extends Controller
 
             $newOrderNum = $this->arrangeOrderNumber('options', 'question_id', $request->question_id);
 
-            if (isset($request->question_id)) {
-                $option = Option::where('id', $request->id)->where('question_id', $request->question_id)->first();
+            if (isset($request->question_id_req)) {
+                $option = Option::where('id', $request->id)->where('question_id', $request->question_id_req)->first();
                 if (!$option) {
                     $message = 'Cannot find the model';
                     $route = route('options.index');

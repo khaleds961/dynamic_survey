@@ -34,7 +34,7 @@
                             @foreach ($sections as $section)
                                 <option value="{{ $section->id }}"
                                     {{ old('section_id', $section_id) == $section->id ? 'selected' : '' }}>
-                                    {{ $section->title_en ? $section->title_en : $section->title_ar }}
+                                    {{ $section->title_ar ? $section->title_ar .' - '.$section->title_en : $section->title_en }}
                                 </option>
                             @endforeach
                         </select>

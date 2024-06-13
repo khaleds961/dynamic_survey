@@ -20,12 +20,13 @@ class ApiController extends Controller
             $survey = Survey::with([
                 'property',
                 'sections.questions.options'
-            ])->where('is_active',1)->findOrFail($survey_id);
+            ])->findOrFail($survey_id);
             return response()->json($survey);
         } catch (ModelNotFoundException) {
             return response()->json(['message' => 'Cannot find this model']);
         }
     }
+
 
     public function submitSurvey(Request $request)
     {
@@ -41,7 +42,7 @@ class ApiController extends Controller
                         'email' => $request->participant['email']
                     ]);
                 }
-            } else {
+            }else{
                 $participant = null;
             }
 
@@ -63,11 +64,13 @@ class ApiController extends Controller
                 if ($count == count($datas)) {
                     return response()->json([
                         'msg' => 'Thank you for your time, your survey has been submitted successfully.',
+                        'msg_ar' => 'شكرًا لك على وقتك، لقد تم إرسال الاستبيان الخاص بك بنجاح',
                         'success' => true
                     ]);
                 } else {
                     return response()->json([
                         'msg' => 'There was an issue with your submission. Please try again.',
+                        'msg_ar' => 'كانت هناك مشكلة في الإرسال الخاص بك. حاول مرة اخرى.',
                         'success' => false
                     ], 500);
                 }

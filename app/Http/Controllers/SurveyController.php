@@ -37,6 +37,7 @@ class SurveyController extends Controller
                 return $row->title_en ? $row->title_en : '';
             })->addColumn('logo', function ($row) {
                 if ($row->property && $row->property->logo) {
+                    // /app/public
                     return "<img class='rounded' src='" . asset('storage/' . $row->property->logo) . "' alt='logo' width='60' height='60' />";
                 } else {
                     return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";

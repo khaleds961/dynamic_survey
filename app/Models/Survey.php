@@ -50,10 +50,18 @@ class Survey extends Model
     }
 
     // Define the many-to-many relationship with Section
+    // public function sections()
+    // {
+    //     return $this->belongsToMany(Section::class, 'survey_sections', 'survey_id', 'section_id')
+    //         ->select('*', 'order_num')->orderBy('order_num', 'asc')
+    //         ->wherePivot('is_active', 1);
+    // }
+
     public function sections()
     {
         return $this->belongsToMany(Section::class, 'survey_sections', 'survey_id', 'section_id')
-            ->select('*', 'order_num')->orderBy('order_num', 'asc')
+            ->withPivot('is_active', 'order_num')
+            ->orderBy('order_num', 'asc')
             ->wherePivot('is_active', 1);
     }
 }
