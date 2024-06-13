@@ -6,6 +6,7 @@ use App\Http\Controllers\OptionController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\SurveySectionController;
@@ -29,8 +30,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::get('/',[Dashboard::class,'index'])->name('index');
 
+    // Route::get('/', function () {
+    //     return view('users/index');
+    // })->name('index');
+
     //Users
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/show', [UserController::class, 'show'])->name('users.show');
@@ -82,17 +87,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');
     Route::get('/participants/show', [ParticipantController::class, 'show'])->name('participants.show');
 
+    //Roles
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles/show', [RoleController::class, 'show'])->name('roles.show');
 
     //Global
     Route::post('/change_status', [GlobalController::class, 'change_status'])->name('change_status');
     Route::post('/custom_delete', [GlobalController::class, 'custom_delete'])->name('custom_delete');
     Route::post('/row_reorder', [GlobalController::class, 'row_reorder'])->name('row_reorder');
 
-
-    Route::get('/', function () {
-        return view('users/index');
-    })->name('index');
-
+    //Logout
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

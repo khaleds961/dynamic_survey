@@ -10,7 +10,7 @@
                         class="ti ti-home fs-4 mt-1"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('users.index') }}" class="text-info">Users</a>
+                <a href="{{ route('index') }}" class="text-info">Users</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="#" class="text-info">Add New User</a>
@@ -53,6 +53,21 @@
                             </button>
                         </div>
                         @error('password')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-6 mb-3">
+                        <label class="form-label" for="role_id">Roles</label><span class="text-danger">*</span>
+                        <select class="form-control" id="role_id" name="role_id">
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}"
+                                    {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                    {{ $role->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('role_id')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>

@@ -9,12 +9,11 @@ if ($checked_flag == 1) {
 @if ($action == 'is_active')
     <div class="form-check form-switch form-switch-lg">
         <input data-size="Size" class="form-check-input change_status" type="checkbox"
-        data-id="{{ $id }}"
+        data-id="{{ $id }}" {{(Helper::check_permission(config("permissions.$table_name"), 'update')) ? '' : 'disabled'}}
         data-action="{{ $action }}" data-table_name="{{ $table_name }}"
         id="customSwitch_{{ $id }}" {{ $checked }}
         />
         <label class="form-check-label" for="customSwitch_{{ $id }}">Active</label>
-
     </div>
 @endif
 

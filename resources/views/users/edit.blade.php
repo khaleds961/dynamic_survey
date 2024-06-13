@@ -10,7 +10,7 @@
                         class="ti ti-home fs-4 mt-1"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('users.index') }}" class="text-info">Users</a>
+                <a href="{{ route('index') }}" class="text-info">Users</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="#" class="text-info">Edit User</a>

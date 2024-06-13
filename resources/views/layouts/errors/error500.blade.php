@@ -31,10 +31,14 @@
                 <div class="row justify-content-center w-100">
                     <div class="col-lg-4">
                         <div class="text-center ">
+                            @if($route)
                             <a href="{{ $route }}">
-                                <img src="{{ asset('images/error/error_500.jpg') }}" alt=""
+                                <img src="{{ asset('/images/error/error_500.jpg') }}" alt=""
                                     class="img-fluid my-3">
                             </a>
+                            @else
+                            <h4 class="text-white">Error: Something goes wrong !</h4>
+                            @endif
                         </div>
                     </div>
                 </div>

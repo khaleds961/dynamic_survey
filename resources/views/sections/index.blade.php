@@ -21,6 +21,7 @@
                 </li>
             </ol>
 
+            @if(Helper::check_permission(config('permissions.sections'), 'write'))
             <div class="mx-2">
                 <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
                 href="{{route('sections.create')}}">
@@ -28,6 +29,7 @@
                     <span>Add New Section</span>
                 </a>
             </div>
+            @endif
         </div>
     </nav>
 

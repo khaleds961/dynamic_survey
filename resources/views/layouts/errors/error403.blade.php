@@ -22,17 +22,18 @@
   <body>
 
     <!--  Body Wrapper -->
-    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" style="background-color: #ee7600">
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" style="background-color: #332851">
       <div class="position-relative overflow-hidden min-vh-100 d-flex align-items-center justify-content-center">
         <div class="d-flex align-items-center justify-content-center w-100">
           <div class="row justify-content-center w-100">
             <div class="col-lg-4">
               <div class="text-center ">
-                {{-- <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/backgrounds/errorimg.svg" alt="" class="img-fluid"> --}}
                 <img src="{{asset('images/error/error_403.png')}}" alt="" class="img-fluid my-3">
                 <h1 class="fw-semibold mb-7 fs-9 text-white">Opps!!!</h1>
                 <h4 class="fw-semibold mb-7 text-white">{{$message}}</h4>
+                @if($route)
                 <a class="btn btn-danger" style="background: #4c5b70;" href="{{$route}}" role="button">Go Back to Home</a>
+                @endif
               </div>
             </div>
           </div>

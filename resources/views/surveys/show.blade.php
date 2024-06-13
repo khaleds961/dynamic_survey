@@ -167,11 +167,13 @@
                 <div class="col-12">
                     <div class="d-flex justify-content-between my-2">
                         <h4>Sections</h4>
+                        @if(Helper::check_permission(config('permissions.surveys'), 'write'))
                         <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
                             href="/surveysections/create?survey_id={{ $survey->id }}">
                             <i class="ti ti-circle-plus"></i>
                             <span>Add New Survey Section Relation</span>
                         </a>
+                        @endif
                     </div>
                     <div class="card">
                         <div class="table-responsive rounded-2 my-2">

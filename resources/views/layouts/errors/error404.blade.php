@@ -31,7 +31,9 @@
                 <img src="{{asset('images/error/404.png')}}" alt="" class="img-fluid my-3">
                 <h1 class="fw-semibold mb-7 fs-9 text-white">Opps!!!</h1>
                 <h4 class="fw-semibold mb-7 text-white">{{$message}}</h4>
+                @if($route)
                 <a class="btn btn-primary" style="background: #4c5b70;" href="{{$route}}" role="button">Go Back to Previous Page</a>
+                @endif
               </div>
             </div>
           </div>

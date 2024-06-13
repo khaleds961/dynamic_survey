@@ -23,7 +23,7 @@
                 </li>
             </ol>
 
-
+            @if (Helper::check_permission(config('permissions.users'), 'write'))
             <div class="mx-2">
                 <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
                     href="{{ route('users.create') }}">
@@ -31,6 +31,8 @@
                     <span>Add New User</span>
                 </a>
             </div>
+            @endif
+
         </div>
     </nav>
 
@@ -92,7 +94,7 @@
                 scrollCollapse: true,
                 paging: true,
                 responsive: true,
-                ajax: "{{ route('users.index') }}",
+                ajax: "{{ route('index') }}",
                 columns: [{
                         data: "id",
                         id: 'id'

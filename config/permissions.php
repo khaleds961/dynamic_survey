@@ -1,13 +1,11 @@
 <?php
 return [
-    'admins_types'  => 2,
-    'club_category' => 23,
-    'club_items'    => 24,
-    'court_items'   => 25,
-    'courts'        => 26,
-    'sports'        => 27,
-    'bookings'      => 28,
-    'staff'         => 29,
-    'accounting'    => 30,
-    'clients'       => 31
+    'users'           => 1,
+    'surveys'         => 2,
+    'sections'        => 3,
+    'questions'       => 4,
+    'options'         => 5,
+    'participants'    => 6,
+    'roles'           => 7,
+    'survey_sections' => 8
 ];

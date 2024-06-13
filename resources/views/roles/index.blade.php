@@ -1,7 +1,9 @@
 @extends('layouts.master')
-@section('title', 'Surveys')
+@section('title', 'Options')
 @section('content')
 
+
+    <!-- Flash message -->
     @if (session('success'))
         <div id="flash-message" class="btn alert alert-success">
             {{ session('success') }}
@@ -17,66 +19,29 @@
                             class="ti ti-home fs-4 mt-1"></i></a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="#" class="text-info">Surveys</a>
+                    <a href="#" class="text-info">Roles</a>
                 </li>
             </ol>
 
-            @if(Helper::check_permission(config('permissions.surveys'), 'write'))
-            <div class="mx-2">
-                <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
-                    href="{{ route('surveys.create') }}">
-                    <i class="ti ti-circle-plus"></i>
-                    <span>Add New Survey</span>
-                </a>
-            </div>
-            @endif
 
+            <div class="mx-2">
+                @if((Helper::check_permission(config('permissions.roles'), 'write')))
+                <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
+                    href="{{ route('options.create') }}">
+                    <i class="ti ti-circle-plus"></i>
+                    <span>Add New Role</span>
+                </a>
+                @endif
+            </div>
         </div>
     </nav>
 
     <div class="row mt-4">
         <div class="col-12">
-            {{-- <div class="row">
-                <div class="col-md-2">
-                    <div class="mb-3 has-success">
-                        <label class="control-label">FROM</label>
-                        <input type="date" class="form-control" id="start_date">
-                        <span id="start_date_error"></span>
-                    </div>
-                </div>
-                <!--/span-->
-                <div class="col-md-2">
-                    <div class="mb-3">
-                        <label class="control-label">TO</label>
-                        <input type="date" class="form-control" id="end_date">
-                        <span id="end_date_error"></span>
-                    </div>
-                </div>
-                <!--/span-->
-
-                <div class="col-md-6">
-                    <button class="btn btn-dark margin_top_responsive" id="search_bookings">
-                        <i class="ti ti-search"></i>
-                        <span>Search</span>
-                    </button>
-
-                    <button class="btn btn-primary margin_top_responsive mx-2" id="clear_bookings">
-                        <i class="ti ti-brush"></i>
-                        <span>Clear Dates</span>
-                    </button>
-                </div>
-            </div> --}}
-
             <div class="card">
-
-                <div class="card-body">
-
-
-                </div>
-
                 <div class="table-responsive rounded-2 my-2">
                     <div class="table-responsive mx-4">
-                        <table id="surveys-list" class="table border table-striped table-bordered display text-nowrap">
+                        <table id="options-list" class="table border table-striped table-bordered display text-nowrap">
                             <thead>
                                 <!-- start row -->
                                 <tr>
@@ -84,19 +49,13 @@
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">#</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">date</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Title</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">logo</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">permissions</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title en</h6>
-                                    </th>
-                                    <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title ar</h6>
-                                    </th>
-                                    <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">main color</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">users</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
@@ -110,8 +69,6 @@
                             <tbody>
                                 <!-- start row -->
                                 <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -134,50 +91,39 @@
     <script>
         $(document).ready(function() {
 
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-
-
-            var table = $('#surveys-list').DataTable({
+            var table = $('#options-list').DataTable({
                 processing: true,
                 serverSide: true,
                 scrollY: '100%',
                 scrollCollapse: true,
                 paging: true,
                 responsive: true,
-                ajax: "{{ route('surveys.index') }}",
+                ajax: "{{ route('roles.index') }}",
                 columns: [{
-                        data: 'id',
-                        id: 'id'
+                        data: "id",
+                        name: 'id'
                     },
                     {
-                        data: 'date',
-                        name: 'date'
+                        data: 'title',
+                        name: 'title',
                     },
                     {
-                        data: "logo",
-                        name: 'logo',
-                        orderable: false,
+                        data: "permissions",
+                        name: 'permissions',
                         searchable: false,
+                        orderable: false
                     },
                     {
-                        data: "title_en",
-                        name: 'title_en'
-                    },
-                    {
-                        data: "title_ar",
-                        name: 'title_ar'
-                    },
-                    {
-                        data: 'mainColor',
-                        name: 'mainColor'
+                        data: "users",
+                        name: 'users',
+                        searchable: false,
+                        orderable: false
                     },
                     {
                         data: 'is_active',
-                        name: 'is_active'
+                        name: 'is_active',
+                        searchable: false,
+                        orderable: false
                     },
                     {
                         data: 'action',
@@ -186,8 +132,11 @@
                         orderable: false
                     },
                 ],
-                order: [0, 'desc'],
+                order: [
+                    [0, 'desc']
+                ],
             });
+
 
         });
     </script>
