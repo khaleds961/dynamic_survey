@@ -23,9 +23,7 @@ class UserController extends Controller
         try {
             if (Helper::check_permission(config('permissions.users'), 'read')) {
                 if ($request->ajax()) {
-
-                    $query = User::where('id', '!=', Auth::user()->id);
-
+                    $query = User::where('id', '!=', Auth::user()->id)->where('id','!=',1);
                     $table = DataTables::eloquent($query)->addColumn('name', function ($row) {
                         return $row->name ? $row->name : '';
                     })->addColumn('email', function ($row) {
@@ -64,7 +62,7 @@ class UserController extends Controller
     public function create()
     {
         if (Helper::check_permission(config('permissions.users'), 'write')) {
-            $roles = Role::all();
+            $roles = Role::where('id','!=',1)->get();
             return view('users.create', compact('roles'));
         } else {
             $message = 'You are not allow to enter this page.';
@@ -121,7 +119,8 @@ class UserController extends Controller
             try {
                 // Attempt to find the survey and load its property relationship
                 $user = User::findOrFail($request->id);
-                return view('users.edit', compact('user'));
+                $roles = Role::where('id','!=',1)->get();
+                return view('users.edit', compact('user','roles'));
             } catch (Exception $e) {
                 // Handle the case where the survey is not found
                 return response()->json(['message' => 'User not found'], 404);

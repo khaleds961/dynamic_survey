@@ -31,7 +31,7 @@
                             </span>
                         </label>
                         <input id="title_ar" name="title_ar" type="text" class="form-control"
-                            placeholder="Enter Title" />
+                            placeholder="Enter Title" value="{{old('title_ar')}}"/>
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your
                             section.</small>
                         <br />
@@ -46,7 +46,7 @@
                             </span>
                         </label>
                         <input id="title_en" name="title_en" type="text" class="form-control"
-                            placeholder="Enter Title" />
+                            placeholder="Enter Title" value="{{old('title_en')}}"/>
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your
                             section.</small>
                         <br />

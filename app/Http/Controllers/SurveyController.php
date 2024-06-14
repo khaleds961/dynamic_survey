@@ -40,9 +40,9 @@ class SurveyController extends Controller
                 })->addColumn('logo', function ($row) {
                     if ($row->property && $row->property->logo) {
                         // /app/public
-                        return "<img class='rounded' src='" . asset('storage/' . $row->property->logo) . "' alt='logo' width='60' height='60' />";
+                        return "<img class='rounded' src='" . asset('storage/app/public/' . $row->property->logo) . "' alt='logo' width='60' height='60' />";
                     } else {
-                        return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
+                        return "<img class='rounded' src='" . asset('storage/app/public/images/not-av.png') . "' alt='logo' width='60' height='60' />";
                     }
                 })->editColumn('language', function ($row) {
                     if ($row->property && $row->property->language) {

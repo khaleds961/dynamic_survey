@@ -11,11 +11,11 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('roles.index') }}" class="text-warning d-flex align-items-center">
-                    Admins
+                    Roles
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="#" class="text-warning">{{ $type_name }}</a>
+                <a href="#" class="text-warning">{{ $role_title }}</a>
             </li>
         </ol>
     </nav>
@@ -24,7 +24,7 @@
         <thead>
             <tr>
                 <th>
-                    <h6 class="fs-4 fw-semibold mb-0 text-uppercase">function</h6>
+                    <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Roles</h6>
                 </th>
                 <th>
                     <h6 class="fs-4 fw-semibold mb-0 text-uppercase">all permissions</h6>
@@ -43,8 +43,7 @@
                 </th>
             </tr>
         </thead>
-        {{-- action="{{ route('permission.update_store') }}" --}}
-        <form  method="post" id="permission_form">
+        <form  method="post" id="permission_form" action="{{ route('roles.update_store') }}">
             @csrf
             <tbody>
                 @foreach ($permissions as $index => $permission)
@@ -61,13 +60,13 @@
                         <td>
                             <span class="d-flex">
                                 <span class="mx-2">Read</span>
-                                <input type="hidden" name="type_id" value="{{ $id }}">
-                                <input type="hidden" name="id[{{ $index }}]" value="{{ $permission->function_id }}">
+                                <input type="hidden" name="role_id" value="{{ $id }}">
+                                <input type="hidden" name="id[{{ $index }}]" value="{{ $permission->permission_id ? $permission->permission_id : $permission->id }}">
                                 <input type="checkbox" name="read[{{ $index }}]" class="form-check-input"
                                     id="read{{ $index }}" {{ $permission->read ? 'checked' : '' }} />
                             </span>
                         </td>
-                        <td>
+                        <td>   
                             <span class="d-flex">
                                 <span class="mx-2">Write</span>
                                 <input type="checkbox" name="write[{{ $index }}]" class="form-check-input"

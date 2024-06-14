@@ -14,11 +14,11 @@
 
         $lang = isset($survey->property->language) ? $survey->property->language : '';
         $logo = isset($survey->property->logo)
-            ? asset('storage/' . $survey->property->logo)
-            : asset('storage/images/not-av.png');
+            ? asset('storage/app/public' . $survey->property->logo)
+            : asset('storage/app/public/images/not-av.png');
         $backgroundImage = isset($survey->property->backgroundImage)
-            ? asset('storage/' . $survey->property->backgroundImage)
-            : asset('storage/images/not-av.png');
+            ? asset('storage/app/public/' . $survey->property->backgroundImage)
+            : asset('storage/app/public/images/not-av.png');
 
     @endphp
 

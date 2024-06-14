@@ -4,7 +4,7 @@
 
     @php
         $question_id_req = request()->has('question_id') ? request()->query('question_id') : null;
-        $icon = isset($option->icon) ? asset('storage/' . $option->icon) : asset('storage/images/not-av.png');
+        $icon = isset($option->icon) ? asset('storage/app/public/' . $option->icon) : asset('storage/app/public/images/not-av.png');
     @endphp
 
 

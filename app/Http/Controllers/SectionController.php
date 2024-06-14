@@ -101,8 +101,6 @@ class SectionController extends Controller
                 $validate = Validator::make($request->all(), [
                     'title_en' => 'required|max:255',
                     'title_ar' => 'required|max:255',
-                    'description_en' => 'required',
-                    'description_ar' => 'required'
                 ]);
 
                 if ($validate->fails()) {
@@ -164,7 +162,6 @@ class SectionController extends Controller
                 $section = Section::findOrFail($request->id);
                 return view('sections.edit', compact('section'));
             } catch (Exception $e) {
-                return $e;
                 $message = 'Cannot find the model';
                 $route = route('sections.index');
                 return view('layouts.errors.error404', compact('message', 'route'));
@@ -184,8 +181,6 @@ class SectionController extends Controller
         if ((Helper::check_permission(config('permissions.sections'), 'update'))) {
             try {
                 $validate = Validator::make($request->all(), [
-                    'title_en' => 'required|max:255',
-                    'title_ar' => 'required|max:255',
                     'description_en' => 'required',
                     'description_ar' => 'required'
                 ]);
@@ -203,7 +198,6 @@ class SectionController extends Controller
                 session()->flash('success', 'Section updated successfully.');
                 return redirect()->route('sections.index');
             } catch (Exception $e) {
-                return $e;
                 $message = 'Cannot find the model';
                 $route = route('sections.index');
                 return view('layouts.errors.error404', compact('message', 'route'));

@@ -39,10 +39,11 @@ class OptionController extends Controller
                     })
                     ->editColumn('icon', function ($row) {
                         if ($row->icon) {
-                            return "<img class='rounded' src='" . asset('storage/' . $row->icon) . "' alt='logo' width='60' height='60' />";
+                            return "<img class='rounded' src='" . asset('storage/app/public/' . $row->icon) . "' alt='logo' width='60' height='60' />";
                         } else {
-                            return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
+                            return "<img class='rounded' src='" . asset('storage/app/public/images/not-av.png') . "' alt='logo' width='60' height='60' />";
                         }
+                        //storage/app/public/
                     })
                     ->addColumn('question_ar', function ($row) {
                         if ($row->question && $row->question->question_text_ar && strlen($row->question->question_text_ar) > 60) {
@@ -110,9 +111,9 @@ class OptionController extends Controller
                 })
                 ->addColumn('icon', function ($row) {
                     if ($row->icon) {
-                        return "<img class='rounded' src='" . asset('storage/' . $row->icon) . "' alt='logo' width='60' height='60' />";
+                        return "<img class='rounded' src='" . asset('storage/app/public/' . $row->icon) . "' alt='logo' width='60' height='60' />";
                     } else {
-                        return "<img class='rounded' src='" . asset('storage/images/not-av.png') . "' alt='logo' width='60' height='60' />";
+                        return "<img class='rounded' src='" . asset('storage/app/public/images/not-av.png') . "' alt='logo' width='60' height='60' />";
                     }
                 })
                 ->addColumn('option_text_en', function ($row) {
@@ -214,7 +215,9 @@ class OptionController extends Controller
                     return redirect()->route('options.index');
                 }
             } catch (Exception $e) {
-                return $e;
+                $message = 'Something Goes Wrong.';
+                $route = route('options.index');
+                return view('layouts.errors.error500', compact('message', 'route'));
             }
         } else {
             $message = 'You are not allow to enter this page.';
@@ -331,6 +334,7 @@ class OptionController extends Controller
                 $route = route('options.index');
                 return view('layouts.errors.error404', compact('message', 'route'));
             } catch (Exception $e) {
+                $message = 'Something goes Wrong.';
                 $route = route('options.index');
                 return view('layouts.errors.error500', compact('route'));
             }

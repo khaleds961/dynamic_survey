@@ -89,7 +89,14 @@ Route::middleware(['auth'])->group(function () {
 
     //Roles
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('/roles/show', [RoleController::class, 'show'])->name('roles.show');
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::post('/roles/update', [RoleController::class, 'update'])->name('roles.update');
+    Route::get('/roles/show/{id}', [RoleController::class, 'show'])->name('roles.show');
+    Route::post('/roles/update_store', [RoleController::class, 'update_store'])->name('roles.update_store');
+    Route::get('/roles/usersbyrole', [RoleController::class, 'usersbyrole'])->name('roles.usersbyrole');
+
 
     //Global
     Route::post('/change_status', [GlobalController::class, 'change_status'])->name('change_status');

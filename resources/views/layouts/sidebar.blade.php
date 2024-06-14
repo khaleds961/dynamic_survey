@@ -34,7 +34,7 @@
                 <x-sidebar-item :routes="['participants.index','participants.show']" icon="ti ti-brand-campaignmonitor" title="Participants" />
                 @endif
                 @if(Helper::check_permission(config('permissions.roles'), 'read'))
-                <x-sidebar-item :routes="['roles.index','roles.show']" icon="ti ti-home-shield" title="Roles" />
+                <x-sidebar-item :routes="['roles.index','roles.show','roles.create','roles.edit','roles.usersbyrole']" icon="ti ti-home-shield" title="Roles" />
                 @endif
             </ul>
         </nav>

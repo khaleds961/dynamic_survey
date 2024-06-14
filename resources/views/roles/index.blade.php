@@ -27,7 +27,7 @@
             <div class="mx-2">
                 @if((Helper::check_permission(config('permissions.roles'), 'write')))
                 <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
-                    href="{{ route('options.create') }}">
+                    href="{{ route('roles.create') }}">
                     <i class="ti ti-circle-plus"></i>
                     <span>Add New Role</span>
                 </a>
