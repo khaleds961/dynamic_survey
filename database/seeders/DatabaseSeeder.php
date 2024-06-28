@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             ['title' => 'options'],
             ['title' => 'participants'],
             ['title' => 'roles'],
-            ['title' => 'survey_sections']
+            ['title' => 'survey_sections'],
+            ['title' => 'fonts'],
         ]);
 
         DB::table('roles')->insert(
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
             ['permission_id' => 6, 'role_id' => 1, 'read' => 1, 'write' => 1, 'update' => 1, 'delete' => 1],
             ['permission_id' => 7, 'role_id' => 1, 'read' => 1, 'write' => 1, 'update' => 1, 'delete' => 1],
             ['permission_id' => 8, 'role_id' => 1, 'read' => 1, 'write' => 1, 'update' => 1, 'delete' => 1],
+            ['permission_id' => 9, 'role_id' => 1, 'read' => 1, 'write' => 1, 'update' => 1, 'delete' => 1],
         ]);
     }
 }

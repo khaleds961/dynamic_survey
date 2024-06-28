@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\Helper;
 use App\Models\Option;
 use App\Models\Question;
+use App\Models\Survey;
+use App\Models\SurveySection;
 use App\Traits\GeneralFunctions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -159,12 +161,47 @@ class OptionController extends Controller
     public function create()
     {
         if ((Helper::check_permission(config('permissions.options'), 'write'))) {
-            $questions = Question::all();
-            return view('options.create', compact('questions'));
+            $surveys = Survey::where('is_active', 1)->where('deleted_at', null)->get();
+            $questions = Question::join('survey_sections', 'questions.section_id', '=', 'survey_sections.section_id')
+                ->join('surveys', 'survey_sections.survey_id', '=', 'surveys.id')
+                ->where('questions.question_type', '!=', 'text')
+                ->where('questions.is_active', 1)
+                ->select('questions.*', 'surveys.title_ar as survey_title_ar', 'surveys.title_en as survey_title_en')
+                ->get();
+            return view('options.create', compact('questions', 'surveys'));
         } else {
             $message = 'You are not allow to enter this page.';
             $route = null;
             return view('layouts.errors.error403', compact('message', 'route'));
+        }
+    }
+
+    public function getSections(Request $request)
+    {
+        $sections = SurveySection::join('sections', 'survey_sections.section_id', '=', 'sections.id')
+            ->where('survey_sections.survey_id', $request->survey_id)
+            ->where('sections.is_active', 1)
+            ->select('sections.*')
+            ->get();
+        if ($sections) {
+            return response([
+                'success' => true,
+                'sections' => $sections
+            ]);
+        }
+    }
+
+    public function getQuestions(Request $request)
+    {
+        $questions = Question::where('section_id', $request->section_id)
+            ->where('question_type','!=','text')
+            ->where('is_active', 1)
+            ->get();
+        if ($questions) {
+            return response([
+                'success' => true,
+                'questions' => $questions
+            ]);
         }
     }
 
@@ -176,7 +213,9 @@ class OptionController extends Controller
         if ((Helper::check_permission(config('permissions.options'), 'write'))) {
             try {
                 $validate = Validator::make($request->all(), [
-                    'question_id' => 'required|integer',
+                    'survey_id' => 'required|integer|not_in:0',
+                    'section_id' => 'required|integer|not_in:0',
+                    'question_id' => 'required|integer|not_in:0',
                     'option_text_ar' => 'required|max:255',
                     'option_text_en' => 'required|max:255',
                 ]);
@@ -241,7 +280,12 @@ class OptionController extends Controller
     {
         if ((Helper::check_permission(config('permissions.options'), 'update'))) {
             $option_id = $request->id;
-            $questions = Question::all();
+            $questions = Question::join('survey_sections', 'questions.section_id', '=', 'survey_sections.section_id')
+                ->join('surveys', 'survey_sections.survey_id', '=', 'surveys.id')
+                ->where('questions.is_active', 1)
+                ->where('questions.question_type', '!=', 'text')
+                ->select('questions.*', 'surveys.title_ar as survey_title_ar', 'surveys.title_en as survey_title_en')
+                ->get();
             try {
                 if (isset($request->question_id)) {
                     $option = Option::where('id', $option_id)->where('question_id', $request->question_id)->first();
@@ -252,7 +296,11 @@ class OptionController extends Controller
                     }
                 }
                 $option = Option::findOrFail($option_id);
-                return view('options.edit', compact('questions', 'option'));
+                $question_id = $option->question_id;
+                $section_id = Question::find($question_id)->section_id;
+                $survey_id = SurveySection::where('section_id',$section_id)->first()->survey_id;
+                $surveys = Survey::where('is_active', 1)->where('deleted_at', null)->get();
+                return view('options.edit', compact('questions', 'option','surveys','survey_id','section_id','question_id'));
             } catch (ModelNotFoundException $e) {
                 $message = 'Cannot find the model';
                 $route = route('options.index');
@@ -274,7 +322,9 @@ class OptionController extends Controller
             try {
                 $validate = Validator::make($request->all(), [
                     'id' => 'required|integer',
-                    'question_id' => 'required|integer',
+                    'survey_id' => 'required|integer|not_in:0',
+                    'section_id' => 'required|integer|not_in:0',
+                    'question_id' => 'required|integer|not_in:0',
                     'option_text_ar' => 'required|max:255',
                     'option_text_en' => 'required|max:255',
                 ]);
@@ -302,10 +352,13 @@ class OptionController extends Controller
                     $image = $request->file('editIcon');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $path = 'images/icons/icon';
-
                     $imagePath =   $this->uploadImage($image, $imageName, $path);
                 } else {
-                    $imagePath = null;
+                    if ($request->keepIcon == '0') {
+                        $imagePath = null;
+                    } else {
+                        $imagePath = $option->icon;
+                    }
                 }
 
                 // Update the property attributes using mass assignment
@@ -313,12 +366,9 @@ class OptionController extends Controller
                     'question_id' => $request->question_id,
                     'option_text_ar' => $request->option_text_ar,
                     'option_text_en' => $request->option_text_en,
-                    'order_num' => $newOrderNum
+                    'order_num' => $newOrderNum,
+                    'icon' => $imagePath
                 ];
-
-                if ($imagePath) {
-                    $OptionData['icon'] = $imagePath;
-                }
 
                 $option->update($OptionData);
 

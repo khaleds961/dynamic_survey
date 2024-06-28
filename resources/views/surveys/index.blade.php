@@ -144,7 +144,9 @@
             var table = $('#surveys-list').DataTable({
                 processing: true,
                 serverSide: true,
-                scrollY: '100%',
+                autoWidth: false,
+                scrollY: true,
+                scrollX:true,
                 scrollCollapse: true,
                 paging: true,
                 responsive: true,

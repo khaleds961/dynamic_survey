@@ -174,7 +174,6 @@
             });
     });
 
-    //soft delete
     $(document).on('click', '.show_confirm', function(event) {
         var id = $(this).data("id");
         var table_name = $(this).data("table_name");
@@ -211,6 +210,7 @@
             });
     });
 
+
     // flash message
     document.addEventListener("DOMContentLoaded", function() {
         var flashMessage = document.getElementById('flash-message');
@@ -220,6 +220,81 @@
             }, 3000); // Hide after 3 seconds
         }
     });
+
+    function getSections(survey_id) {
+            if (survey_id) {
+                $.ajax({
+                    url: "{{ route('options.getSections') }}",
+                    data: {
+                        survey_id: survey_id
+                    },
+                    type: 'POST',
+                    success: function(data) {
+                        if (data.success && data.sections.length > 0) {
+                            var sections = data.sections;
+                            $('#section_id').prop('disabled', false);
+                            $('#section_idHelp').removeClass('text-danger').text(
+                                'Enter a proper Section.');
+                            var sectionsSelect = document.getElementById('section_id');
+                            sectionsSelect.innerHTML =
+                                '<option value="0" disabled selected>-- Select a question --</option>';
+                            sections.forEach(function(section) {
+                                var option = document.createElement('option');
+                                option.value = section.id;
+                                option.textContent = section.title_ar + " - " + section
+                                    .title_en; // Assuming 'text' is the field name for question text
+                                if (section_id && section.id == section_id) {
+                                    option.selected = true;
+                                }
+                                sectionsSelect.appendChild(option);
+                            });
+                        } else {
+                            $('#section_id').val(0);
+                            $('#section_id').prop('disabled', true);
+                            $('#section_idHelp').addClass('text-danger').text(
+                                'No sections related to this survey');
+                            $('#question_id').val(0);
+                            $('#question_id').prop('disabled', true);
+                        }
+                    }
+                })
+            }
+        }
+
+        function getQuestions(section_id) {
+            if (section_id) {
+                $.ajax({
+                    url: "{{ route('options.getQuestions') }}",
+                    data: {
+                        section_id: section_id
+                    },
+                    type: 'POST',
+                    success: function(data) {
+                        if (data.success && data.questions.length > 0) {
+                            var questions = data.questions;
+                            $('#question_id').prop('disabled', false);
+                            $('#question_idHelp').removeClass('text-danger').text(
+                                'Enter a proper Question.');
+                            var questionsSelect = document.getElementById('question_id');
+                            questionsSelect.innerHTML =
+                                '<option value="0" disabled selected>-- Select a question --</option>';
+                            questions.forEach(function(question) {
+                                var option = document.createElement('option');
+                                option.value = question.id;
+                                option.textContent = question.question_text_ar + "  " + question.question_text_en + " - " + '"' + question.question_type + '"';
+                                if (question_id && question.id == question_id) {
+                                    option.selected = true;
+                                }
+                                questionsSelect.appendChild(option);
+                            });
+                        } else {
+                            $('#question_id').prop('disabled', true);
+                            $('#question_idHelp').addClass('text-danger').text('No Question related to this section');
+                        }
+                    }
+                })
+            }
+        }
 
 </script>
 

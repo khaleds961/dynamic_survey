@@ -50,10 +50,13 @@ class GlobalController extends Controller
         }
 
         $instance->delete();
-        DB::table($table_name)->where('id', '=', $id)->update(['is_active' => 0]);
+        if ($table_name != 'fonts') {
+            DB::table($table_name)->where('id', '=', $id)->update(['is_active' => 0]);
+        }
 
         return response()->json(['success' => 'Record deleted successfully.']);
     }
+
 
     public function row_reorder(Request $request)
     {

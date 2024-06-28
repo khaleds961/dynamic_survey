@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FontController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\ParticipantController;
@@ -25,6 +26,11 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+//front
+// Route::get('/dynamic_survey', function () {
+//     return \File::get(public_path() . '/index.html');
+// });
 
 Route::middleware(['auth'])->group(function () {
 
@@ -82,6 +88,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/options/edit', [OptionController::class, 'edit'])->name('options.edit');
     Route::post('/options/update', [OptionController::class, 'update'])->name('options.update');
     Route::get('/question_options', [OptionController::class, 'question_options'])->name('options.question_options');
+    Route::post('/options/getSections', [OptionController::class, 'getSections'])->name('options.getSections');
+    Route::post('/options/getQuestions', [OptionController::class, 'getQuestions'])->name('options.getQuestions');
+
+
+    //Fonts
+    Route::get('/font', [FontController::class, 'index'])->name('fonts.index');
+    Route::get('/font/create', [FontController::class, 'create'])->name('fonts.create');
+    Route::post('/font/store', [FontController::class, 'store'])->name('fonts.store');
+    Route::get('/font/edit', [FontController::class, 'edit'])->name('fonts.edit');
 
     //Responses
     Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');

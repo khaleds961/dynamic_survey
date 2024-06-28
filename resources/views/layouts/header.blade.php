@@ -2,6 +2,10 @@
     .dataTables_scrollBody {
         max-height: auto !important;
     }
+
+    /* .dataTables_scrollHead {
+        overflow: auto !important;
+    } */
 </style>
 
 <!--  Header Start -->

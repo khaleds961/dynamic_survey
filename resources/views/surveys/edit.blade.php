@@ -3,23 +3,16 @@
 @section('content')
 
     @php
-        $fonts = [
-            ['name' => 'Arial', 'value' => 'Arial, sans-serif'],
-            ['name' => 'Times New Roman', 'value' => 'Times New Roman'],
-            ['name' => 'Courier New', 'value' => 'Courier New, Courier, monospace, sans-serif'],
-            ['name' => 'Georgia', 'value' => 'Georgia, serif'],
-            ['name' => 'Trebuchet MS', 'value' => 'Trebuchet MS, Helvetica, sans-serif'],
-            ['name' => 'Verdana', 'value' => 'Verdana, sans-serif'],
-        ];
-
         $lang = isset($survey->property->language) ? $survey->property->language : '';
         $logo = isset($survey->property->logo)
             ? asset('storage/app/public/' . $survey->property->logo)
             : asset('storage/app/public/images/not-av.png');
         $backgroundImage = isset($survey->property->backgroundImage)
             ? asset('storage/app/public/' . $survey->property->backgroundImage)
-            : asset('storage/app/public/images/app/public/not-av.png');
-            // app/public/
+            : asset('storage/app/public/images/not-av.png');
+        $logoFooter = isset($survey->property->logoFooter)
+            ? asset('storage/app/public/' . $survey->property->logoFooter)
+            : asset('storage/app/public/images/not-av.png');
     @endphp
 
     {{-- BreadCrumbs --}}
@@ -44,7 +37,7 @@
                 @csrf
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="title_ar">Title Ar</label>
+                        <label for="title_ar">Title Ar<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="title_ar" aria-describedby="titleHelp"
                             placeholder="Enter Title" name="title_ar" value="{{ old('title_ar', $survey->title_ar) }}">
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your survey.</small>
@@ -55,7 +48,7 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="title_en">Title En</label>
+                        <label for="title_en">Title En<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="title_en" aria-describedby="titleHelp"
                             placeholder="Enter Title" name="title_en" value="{{ old('title_en', $survey->title_en) }}">
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your survey.</small>
@@ -79,15 +72,19 @@
                     </div> --}}
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="logo">Logo</label>
+                        <label for="logo">Logo <span class="text-danger">(should be without background -
+                                PNG,JPG,JPEG)</span></label>
+                        <input type="hidden" name="keepLogoImage" value="1">
                         <div id="logo">
                         </div>
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="backgroundImage">Background Image</label>
+                        <label for="backgroundImage">Background Image <span class="text-danger">(Dimessions-1920px*1080px -
+                                PNG,JPG,JPEG)</span></label>
                         <div id="backgroundImage">
                         </div>
+                        <input type="hidden" name="keepBackgroundImage" value="1">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
@@ -115,9 +112,9 @@
                             <label for="font-family-select">Choose a font family:</label>
                             <select id="font-family-select" class="form-control" name="fontFamily">
                                 @foreach ($fonts as $font)
-                                    <option value="{{ $font['value'] }}"
-                                        {{ isset($survey->property->fontFamily) && $survey->property->fontFamily == $font['value'] ? 'selected' : '' }}>
-                                        {{ $font['name'] }}
+                                    <option value="{{ $font['id'] }}"
+                                        {{ isset($survey->property->fontFamily) && $survey->property->fontFamily == $font['id'] ? 'selected' : '' }}>
+                                        {{ $font['title'] }}
                                     </option>
                                 @endforeach
 
@@ -152,7 +149,7 @@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input primary" type="radio" name="show_personal"
                                         id="success2-radio" value="1"
-                                    {{ isset($survey->property->show_personal) && $survey->property->show_personal == 1 ? 'checked' : '' }}>
+                                        {{ isset($survey->property->show_personal) && $survey->property->show_personal == 1 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="success2-radio">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -195,6 +192,14 @@
                         @error('footer_en')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
+                    </div>
+
+                    <div class="form-group col-sm-12 mb-3">
+                        <label for="logoFooter">Footer Logo <span class="text-danger">(should be without background -
+                                PNG,JPG,JPEG)</span></label>
+                        <input type="hidden" name="keepFooterImage" value="1">
+                        <div id="logoFooter">
+                        </div>
                     </div>
 
 
@@ -258,6 +263,7 @@
             function getImages() {
                 var logoPath = '{{ $logo }}';
                 var backgroundPath = '{{ $backgroundImage }}';
+                var logoFooterPath = '{{ $logoFooter }}';
 
                 $('#logo').append(`<input type="file" name="editLogo" class="dropify" data-max-file-size="2M"
                                     data-allowed-file-extensions="png jpg jpeg">`);
@@ -268,8 +274,13 @@
                                     data-allowed-file-extensions="png jpg jpeg">`);
                 $('.dropify').attr('data-default-file', backgroundPath);
                 $('.dropify').dropify();
-            }
 
+                $('#logoFooter').append(`<input type="file" name="editLogoFooter" class="dropify" data-max-file-size="2M"
+                                    data-allowed-file-extensions="png jpg jpeg">`);
+                $('.dropify').attr('data-default-file', logoFooterPath);
+                $('.dropify').dropify();
+
+            }
 
             // document.getElementById('text-direction').addEventListener('change', function() {
             //     const direction = this.value;
@@ -289,7 +300,19 @@
             var description_ar = $('#description_ar').val().trim();
             $('#description_ar').val(description_ar);
 
-
+            $('.dropify-clear').on('click', function(e) {
+                e.preventDefault();
+                const inputElement = $(this).closest('.dropify-wrapper').find('input[type="file"]');
+                const inputName = inputElement.attr('name');
+                // Set the corresponding hidden input field to indicate removal
+                if (inputName === 'editBackgroundImage') {
+                    $('input[name="keepBackgroundImage"]').val('0');
+                } else if (inputName === 'editLogo') {
+                    $('input[name="keepLogoImage"]').val('0');
+                } else if (inputName === 'editLogoFooter') {
+                    $('input[name="keepFooterImage"]').val('0');
+                }
+            })
 
         });
     </script>

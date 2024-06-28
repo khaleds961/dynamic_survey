@@ -30,6 +30,9 @@
                 @if(Helper::check_permission(config('permissions.options'), 'read'))
                 <x-sidebar-item :routes="['options.index', 'options.edit', 'options.create']" icon="ti ti-circles-relation" title="Options" />
                 @endif
+                @if(Helper::check_permission(config('permissions.fonts'), 'read'))
+                <x-sidebar-item :routes="['fonts.index', 'fonts.edit', 'fonts.create']" icon="ti ti-letter-case-toggle" title="Fonts" />
+                @endif
                 @if(Helper::check_permission(config('permissions.participants'), 'read'))
                 <x-sidebar-item :routes="['participants.index','participants.show']" icon="ti ti-brand-campaignmonitor" title="Participants" />
                 @endif

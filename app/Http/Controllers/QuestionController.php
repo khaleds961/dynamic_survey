@@ -36,17 +36,25 @@ class QuestionController extends Controller
                         return $row->section_id ? $row->section_id : '';
                     })
                     ->addColumn('section_en', function ($row) {
-                        if ($row->section && $row->section->title_en) {
-                            return $row->section->title_en;
+                        if ($row->section && $row->section->title_en && strlen($row->section->title_en) > 40) {
+                            return Str::limit($row->section->title_en, 40);
                         } else {
-                            return '';
+                            if ($row->section && $row->section->title_en) {
+                                return $row->section->title_en;
+                            } else {
+                                return '';
+                            }
                         }
                     })
                     ->addColumn('section_ar', function ($row) {
-                        if ($row->section && $row->section->title_ar) {
-                            return $row->section->title_ar;
+                        if ($row->section && $row->section->title_ar && strlen($row->section->title_ar) > 40) {
+                            return Str::limit($row->section->title_ar, 40);
                         } else {
-                            return '';
+                            if ($row->section && $row->section->title_ar) {
+                                return $row->section->title_ar;
+                            } else {
+                                return '';
+                            }
                         }
                     })
                     ->editColumn('question_type', function ($row) {
@@ -62,15 +70,15 @@ class QuestionController extends Controller
                         }
                     })
                     ->editColumn('question_text_ar', function ($row) {
-                        if ($row->question_text_ar && strlen($row->question_text_ar) > 60) {
-                            return Str::limit($row->question_text_ar, 60);
+                        if ($row->question_text_ar && strlen($row->question_text_ar) > 40) {
+                            return Str::limit($row->question_text_ar, 40);
                         } else {
                             return $row->question_text_ar;
                         }
                     })
                     ->editColumn('question_text_en', function ($row) {
-                        if ($row->question_text_en && strlen($row->question_text_en) > 60) {
-                            return Str::limit($row->question_text_en, 60);
+                        if ($row->question_text_en && strlen($row->question_text_en) > 40) {
+                            return Str::limit($row->question_text_en, 40);
                         } else {
                             return $row->question_text_en;
                         }

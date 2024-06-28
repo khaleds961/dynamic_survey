@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Models\Font;
 use App\Models\Property;
 use App\Models\Survey;
 use App\Traits\GeneralFunctions;
@@ -89,7 +90,8 @@ class SurveyController extends Controller
     public function create()
     {
         if (Helper::check_permission(config('permissions.surveys'), 'write')) {
-            return view('surveys.create');
+            $fonts = Font::all();
+            return view('surveys.create', compact('fonts'));
         } else {
             $message = 'You are not allow to enter this page.';
             $route = null;
@@ -146,9 +148,21 @@ class SurveyController extends Controller
                     $backgroundImagePath = null;
                 }
 
+                if ($request->hasFile('logoFooter')) {
+                    // Handle the uploaded file
+                    $logoFooter = $request->file('logoFooter');
+                    $logoFooterName = time() . '.' . $logoFooter->getClientOriginalExtension();
+                    $path = 'images/logos/logo';
+
+                    $logoFooterPath = $this->uploadImage($logoFooter, $logoFooterName, $path);
+                } else {
+                    $logoFooterPath = null;
+                }
+
                 if ($survey) {
                     $property = Property::create([
                         'logo' => $logoPath,
+                        'logoFooter' => $logoFooterPath,
                         'survey_id' => $survey->id,
                         'backgroundColor' => $request->backgroundColor,
                         'backgroundImage' => $backgroundImagePath,
@@ -185,7 +199,8 @@ class SurveyController extends Controller
             try {
                 // Attempt to find the survey and load its property relationship
                 $survey = Survey::with('property')->findOrFail($request->id);
-                return view('surveys.show', compact('survey'));
+                $fonts = Font::all();
+                return view('surveys.show', compact('survey', 'fonts'));
             } catch (Exception $e) {
                 $message = 'Cannot find the model';
                 $route = route('surveys.index');
@@ -207,7 +222,8 @@ class SurveyController extends Controller
             try {
                 // Attempt to find the survey and load its property relationship
                 $survey = Survey::with('property')->findOrFail($request->id);
-                return view('surveys.edit', compact('survey'));
+                $fonts = Font::all();
+                return view('surveys.edit', compact('survey', 'fonts'));
             } catch (Exception $e) {
                 $message = 'Cannot find the model';
                 $route = route('surveys.index');
@@ -248,31 +264,47 @@ class SurveyController extends Controller
                 // Find the property by survey ID
                 $property = Property::where('survey_id', $request->id)->firstOrFail();
 
-
                 if ($request->hasFile('editLogo')) {
                     // Handle the uploaded file
                     $logo = $request->file('editLogo');
                     $logoName = time() . '.' . $logo->getClientOriginalExtension();
                     $path = 'images/logos/logo';
-
                     $logoPath =   $this->uploadImage($logo, $logoName, $path);
                 } else {
-                    $logoPath = null;
+                    if ($request->keepLogoImage == '0') {
+                        $logoPath = null;
+                    } else {
+                        $logoPath = $property->logo;
+                    }
                 }
+                
 
+                if ($request->hasFile('editLogoFooter')) {
+                    // Handle the uploaded file
+                    $logoFooter = $request->file('editLogoFooter');
+                    $logoFooterName = time() . '.' . $logoFooter->getClientOriginalExtension();
+                    $path = 'images/logos/logo';
+                    $logoFooterPath =   $this->uploadImage($logoFooter, $logoFooterName, $path);
+                } else {
+                    if ($request->keepFooterImage == '0') {
+                        $logoFooterPath = null;
+                    } else {
+                        $logoFooterPath = $property->logoFooter;
+                    }
+                }
 
                 if ($request->hasFile('editBackgroundImage')) {
                     // Handle the uploaded file
                     $backgroundImage = $request->file('editBackgroundImage');
                     $backgroundImageName = time() . '.' . $backgroundImage->getClientOriginalExtension();
                     $path = 'images/backgroundImages/background';
-
-                    if (!File::isDirectory($path)) {
-                        File::makeDirectory($path, 0777, true, true);
-                    }
                     $backgroundImagePath =   $this->uploadImage($backgroundImage, $backgroundImageName, $path);
                 } else {
-                    $backgroundImagePath = null;
+                    if ($request->keepBackgroundImage == '0') {
+                        $backgroundImagePath = null;
+                    } else {
+                        $backgroundImagePath = $property->backgroundImage;
+                    }
                 }
 
                 // Update the property attributes using mass assignment
@@ -283,16 +315,23 @@ class SurveyController extends Controller
                     'footer_ar' => $request->footer_ar,
                     'footer_en' => $request->footer_en,
                     'wizard' => $request->wizard,
-                    'show_personal' => $request->show_personal
+                    'show_personal' => $request->show_personal,
+                    'logo' => $logoPath,
+                    'logoFooter' => $logoFooterPath,
+                    'backgroundImage' => $backgroundImagePath
                 ];
 
-                if ($logoPath) {
-                    $propertyData['logo'] = $logoPath;
-                }
+                // if ($logoPath) {
+                //     $propertyData['logo'] = $logoPath;
+                // }
 
-                if ($backgroundImagePath) {
-                    $propertyData['backgroundImage'] = $backgroundImagePath;
-                }
+                // if ($logoFooterPath) {
+                //     $propertyData['logoFooter'] = $logoFooterPath;
+                // }
+
+                // if ($backgroundImagePath) {
+                //     $propertyData['backgroundImage'] = $backgroundImagePath;
+                // }
 
                 $property->update($propertyData);
 
@@ -304,6 +343,7 @@ class SurveyController extends Controller
                 $route = route('surveys.index');
                 return view('layouts.errors.error404', compact('message', 'route'));
             } catch (Exception $e) {
+                return $e;
                 $route = route('surveys.index');
                 return view('layouts.errors.error500', compact('route'));
             }

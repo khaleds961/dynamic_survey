@@ -25,13 +25,26 @@
                 @csrf
                 <div class="row">
 
+                    <div class="form-group col-12 mb-3">
+                        <label for="survey_id">Survey</label><span class="text-danger">*</span>
+                        <select class="form-control" id="survey_id" name="survey_id">
+                            <option value='0' disabled selected>-- Choose An Option --</option>
+                            @foreach ($surveys as $survey)
+                                <option value="{{ $survey->id }}" {{ old('role_id') == $survey->id ? 'selected' : '' }}>
+                                    {{ $survey->title_en . ' - ' . $survey->title_ar }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <small id="survey_idHelp" class="form-text text-muted">Choosing a survey is optional.</small>
+                    </div>
+
                     <div class="col-md-6 mb-4">
                         <label class="form-label d-flex justify-content-between align-items-center">
                             <span>Title Ar
                             </span>
                         </label>
-                        <input id="title_ar" name="title_ar" type="text" class="form-control"
-                            placeholder="Enter Title" value="{{old('title_ar')}}"/>
+                        <input id="title_ar" name="title_ar" type="text" class="form-control" placeholder="Enter Title"
+                            value="{{ old('title_ar') }}" />
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your
                             section.</small>
                         <br />
@@ -45,8 +58,8 @@
                             <span>Title En
                             </span>
                         </label>
-                        <input id="title_en" name="title_en" type="text" class="form-control"
-                            placeholder="Enter Title" value="{{old('title_en')}}"/>
+                        <input id="title_en" name="title_en" type="text" class="form-control" placeholder="Enter Title"
+                            value="{{ old('title_en') }}" />
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your
                             section.</small>
                         <br />

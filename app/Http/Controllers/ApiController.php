@@ -18,7 +18,7 @@ class ApiController extends Controller
         try {
             $survey_id = $request->id;
             $survey = Survey::with([
-                'property',
+                'property.font',
                 'sections.questions.options'
             ])->findOrFail($survey_id);
             return response()->json($survey);

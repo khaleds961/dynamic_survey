@@ -1,16 +1,26 @@
 /* There used in login page, should keep them  */
+@font-face {
+    font-family: RobotoThin;
+    src: url('/fonts/Roboto-Thin.ttf');
+}
 
-* { /* Or what selector you need */
+@font-face {
+    font-family: Playwrite;
+    src: url('/fonts/Playwrite.ttf');
+}
+
+* {
+    /* Or what selector you need */
     unicode-bidi: plaintext;
     /* text-align: start;  */
     /* Align text automatically left/right*/
-  }
+}
 
-  .personal-info{
-    background-color:#1d1160;
-    color:white;
+.personal-info {
+    background-color: #1d1160;
+    color: white;
     font-size: 16px;
-  }
+}
 
 .button_style {
     background-color: #292562 !important;

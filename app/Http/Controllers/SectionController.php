@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Models\Section;
+use App\Models\Survey;
+use App\Models\SurveySection;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,20 +32,28 @@ class SectionController extends Controller
                 }
                 $table = DataTables::eloquent($query)
                     ->editColumn('title_en', function ($row) {
-                        return $row->title_en ? $row->title_en : '';
+                        if (strlen($row->title_en) > 40) {
+                            return Str::limit($row->title_en, 40);
+                        } else {
+                            return $row->title_en ? $row->title_en : '';
+                        }
                     })
                     ->editColumn('title_ar', function ($row) {
-                        return $row->title_ar ? $row->title_ar : '';
+                        if (strlen($row->title_ar) > 40) {
+                            return Str::limit($row->title_ar, 40);
+                        } else {
+                            return $row->title_ar ? $row->title_ar : '';
+                        }
                     })
                     ->editColumn('description_en', function ($row) {
-                        if (strlen($row->description_en) > 60) {
-                            return Str::limit($row->description_en, 60);
+                        if (strlen($row->description_en) > 40) {
+                            return Str::limit($row->description_en, 40);
                         } else {
                             return $row->description_en ? $row->description_en : '';
                         }
                     })->editColumn('description_ar', function ($row) {
-                        if (strlen($row->description_ar) > 60) {
-                            return Str::limit($row->description_ar, 60);
+                        if (strlen($row->description_ar) > 40) {
+                            return Str::limit($row->description_ar, 40);
                         } else {
                             return $row->description_ar ? $row->description_ar : '';
                         }
@@ -83,7 +93,8 @@ class SectionController extends Controller
     public function create()
     {
         if ((Helper::check_permission(config('permissions.sections'), 'write'))) {
-            return view('sections.create');
+            $surveys = Survey::where('is_active', 1)->get();
+            return view('sections.create', compact('surveys'));
         } else {
             $message = 'You are not allow to enter this page.';
             $route = null;
@@ -115,6 +126,17 @@ class SectionController extends Controller
                 ]);
 
                 if ($section) {
+                    if (isset($request->survey_id) && $request->survey_id != 0) {
+                        // Find the max order_num for the given survey_id
+                        $maxOrderNum = SurveySection::where('survey_id', $request->survey_id)->max('order_num');
+                        // Calculate the new order_num
+                        $newOrderNum = $maxOrderNum !== null ? $maxOrderNum + 1 : 0;
+                        SurveySection::create([
+                            'section_id' => $section->id,
+                            'survey_id' => $request->survey_id,
+                            'order_num' => $newOrderNum
+                        ]);
+                    }
                     session()->flash('success', 'Section successfully created.');
                     return redirect()->route('sections.index');
                 }
@@ -181,8 +203,8 @@ class SectionController extends Controller
         if ((Helper::check_permission(config('permissions.sections'), 'update'))) {
             try {
                 $validate = Validator::make($request->all(), [
-                    'description_en' => 'required',
-                    'description_ar' => 'required'
+                    'title_ar' => 'required',
+                    'title_en' => 'required'
                 ]);
 
                 if ($validate->fails()) {

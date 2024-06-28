@@ -18,10 +18,11 @@ return new class extends Migration
             $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
             $table->boolean('show_personal')->default(true);
             $table->text('logo')->nullable();
+            $table->text('logoFooter')->nullable();
             $table->string('backgroundColor')->nullable();
             $table->text('backgroundImage')->nullable();
             $table->string('mainColor')->nullable();
-            $table->string('fontFamily')->nullable();
+            $table->integer('fontFamily')->nullable();
             $table->boolean('wizard')->default(false);
             $table->longText('footer_ar')->nullable();
             $table->longText('footer_en')->nullable();

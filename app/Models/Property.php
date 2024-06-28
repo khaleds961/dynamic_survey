@@ -12,6 +12,7 @@ class Property extends Model
     protected $fillable = [
         'survey_id',
         'logo',
+        'logoFooter',
         'backgroundColor',
         'backgroundImage',
         'mainColor',
@@ -22,4 +23,9 @@ class Property extends Model
         'footer_en',
         'deleted_at'
     ];
+
+    public function font()
+    {
+        return $this->belongsTo(Font::class, 'fontFamily');
+    }
 }

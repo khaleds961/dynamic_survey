@@ -1,9 +1,7 @@
 @extends('layouts.master')
-@section('title', 'Options')
+@section('title', 'Fonts')
 @section('content')
 
-
-    <!-- Flash message -->
     @if (session('success'))
         <div id="flash-message" class="btn alert alert-success">
             {{ session('success') }}
@@ -19,29 +17,31 @@
                             class="ti ti-home fs-4 mt-1"></i></a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="#" class="text-info">Options</a>
+                    <a href="#" class="text-info">Fonts</a>
                 </li>
             </ol>
 
-
+            @if(Helper::check_permission(config('permissions.fonts'), 'write'))
             <div class="mx-2">
-                @if((Helper::check_permission(config('permissions.options'), 'write')))
                 <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
-                    href="{{ route('options.create') }}">
+                    href="{{ route('fonts.create') }}">
                     <i class="ti ti-circle-plus"></i>
-                    <span>Add New Options</span>
+                    <span>Add New Font</span>
                 </a>
-                @endif
             </div>
+            @endif
+
         </div>
     </nav>
 
     <div class="row mt-4">
         <div class="col-12">
+
             <div class="card">
+
                 <div class="table-responsive rounded-2 my-2">
-                    <div class="m-4">
-                        <table id="options-list" class="table border table-striped table-bordered display text-nowrap">
+                    <div class="table-responsive mx-4">
+                        <table id="fonts-list" class="table border table-striped table-bordered display text-nowrap">
                             <thead>
                                 <!-- start row -->
                                 <tr>
@@ -49,22 +49,16 @@
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">#</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">icon</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">title</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question Ar</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">normal</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Question en</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">bold</h6>
                                     </th>
                                     <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text ar</h6>
-                                    </th>
-                                    <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">Option text en</h6>
-                                    </th>
-                                    <th>
-                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">status</h6>
+                                        <h6 class="fs-4 fw-semibold mb-0 text-uppercase">light</h6>
                                     </th>
                                     <th>
                                         <h6 class="fs-4 fw-semibold mb-0 text-uppercase">action</h6>
@@ -75,8 +69,6 @@
                             <tbody>
                                 <!-- start row -->
                                 <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -99,51 +91,40 @@
     <script>
         $(document).ready(function() {
 
-            var table = $('#options-list').DataTable({
+
+            var table = $('#fonts-list').DataTable({
                 processing: true,
                 serverSide: true,
-                autoWidth: false,
-                scrollY: true,
-                scrollX:true,
+                scrollY: '100%',
                 scrollCollapse: true,
                 paging: true,
                 responsive: true,
-                ajax: "{{ route('options.index') }}",
+                ajax: "{{ route('fonts.index') }}",
                 columns: [{
-                        data: "id",
-                        name: 'id'
+                        data: 'id',
+                        id: 'id'
                     },
                     {
-                        data: 'icon',
-                        name: 'icon',
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: "normal",
+                        name: 'normal',
+                        orderable: false,
                         searchable: false,
-                        orderable: false
                     },
                     {
-                        data: "question_ar",
-                        name: 'question_ar',
+                        data: "bold",
+                        name: 'bold',
+                        orderable: false,
                         searchable: false,
-                        orderable: false
                     },
                     {
-                        data: "question_en",
-                        name: 'question_en',
+                        data: "light",
+                        name: 'light',
+                        orderable: false,
                         searchable: false,
-                        orderable: false
-                    },
-                    {
-                        data: "option_text_ar",
-                        name: 'option_text_ar'
-                    },
-                    {
-                        data: "option_text_en",
-                        name: 'option_text_en'
-                    },
-                    {
-                        data: 'is_active',
-                        name: 'is_active',
-                        searchable: false,
-                        orderable: false
                     },
                     {
                         data: 'action',
@@ -152,11 +133,8 @@
                         orderable: false
                     },
                 ],
-                order: [
-                    [0, 'desc']
-                ],
+                order: [0, 'desc'],
             });
-
 
         });
     </script>

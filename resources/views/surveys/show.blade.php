@@ -3,15 +3,6 @@
 @section('content')
 
     @php
-        $fonts = [
-            ['name' => 'Arial', 'value' => 'Arial, sans-serif'],
-            ['name' => 'Times New Roman', 'value' => 'Times New Roman'],
-            ['name' => 'Courier New', 'value' => 'Courier New, Courier, monospace, sans-serif'],
-            ['name' => 'Georgia', 'value' => 'Georgia, serif'],
-            ['name' => 'Trebuchet MS', 'value' => 'Trebuchet MS, Helvetica, sans-serif'],
-            ['name' => 'Verdana', 'value' => 'Verdana, sans-serif'],
-        ];
-
         $lang = isset($survey->property->language) ? $survey->property->language : '';
         $logo = isset($survey->property->logo)
             ? asset('storage/app/public' . $survey->property->logo)
@@ -19,7 +10,9 @@
         $backgroundImage = isset($survey->property->backgroundImage)
             ? asset('storage/app/public/' . $survey->property->backgroundImage)
             : asset('storage/app/public/images/not-av.png');
-
+        $logoFooter = isset($survey->property->logoFooter)
+            ? asset('storage/app/public/' . $survey->property->logoFooter)
+            : asset('storage/app/public/images/not-av.png');
     @endphp
 
 
@@ -88,9 +81,9 @@
                         <label for="font-family-select">Choose a font family:</label>
                         <select id="font-family-select" class="form-control" name="fontFamily" disabled>
                             @foreach ($fonts as $font)
-                                <option value="{{ $font['value'] }}"
-                                    {{ isset($survey->property->fontFamily) && $survey->property->fontFamily == $font['value'] ? 'selected' : '' }}>
-                                    {{ $font['name'] }}
+                                <option value="{{ $font['id'] }}"
+                                    {{ isset($survey->property->fontFamily) && $survey->property->fontFamily == $font['id'] ? 'selected' : '' }}>
+                                    {{ $font['title'] }}
                                 </option>
                             @endforeach
 
@@ -161,18 +154,41 @@
                         {!! isset($survey->property->footer_en) ? old('footer_en', $survey->property->footer_en) : '' !!}
                     </div>
                 </div>
+
+                <div class="form-group col-sm-12 mb-3">
+                    <label for="logoFooter">Footer Logo <span class="text-danger">(should be without background -
+                            PNG,JPG,JPEG)</span></label>
+                    <div id="logoFooter">
+                    </div>
+                </div>
+
+                <div class="form-group col-12 col-md-6  mb-3">
+                    <label for="footer_en">Survey Link En</label><br>
+                    <h4 class="border p-4 mt-2">
+                        https://regsurvey.manialab.sa/dynamic_survey?id={{ $survey->id }}&lang=en
+                    </h4>
+                </div>
+
+                <div class="form-group col-12 col-md-6  mb-3">
+                    <label for="footer_en">Survey Link Ar</label><br>
+                    <h4 class="border p-4 mt-2">
+                        https://regsurvey.manialab.sa/dynamic_survey?id={{ $survey->id }}&lang=ar
+                    </h4>
+                </div>
+
             </div>
 
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="d-flex justify-content-between my-2">
                         <h4>Sections</h4>
-                        @if(Helper::check_permission(config('permissions.surveys'), 'write'))
-                        <a type="button" class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
-                            href="/surveysections/create?survey_id={{ $survey->id }}">
-                            <i class="ti ti-circle-plus"></i>
-                            <span>Add New Survey Section Relation</span>
-                        </a>
+                        @if (Helper::check_permission(config('permissions.surveys'), 'write'))
+                            <a type="button"
+                                class="btn mb-1 waves-effect waves-light btn-light text-dark fs-4 mx-0 mx-md-2"
+                                href="/surveysections/create?survey_id={{ $survey->id }}">
+                                <i class="ti ti-circle-plus"></i>
+                                <span>Add New Survey Section Relation</span>
+                            </a>
                         @endif
                     </div>
                     <div class="card">
@@ -242,6 +258,7 @@
             function getImages() {
                 var logoPath = '{{ $logo }}';
                 var backgroundPath = '{{ $backgroundImage }}';
+                var logoFooterPath = '{{ $logoFooter }}';
 
                 $('#logo').append(`<input type="file" name="editLogo" class="dropify" data-max-file-size="2M"
                                     data-allowed-file-extensions="png jpg jpeg">`);
@@ -251,6 +268,11 @@
                 $('#backgroundImage').append(`<input type="file" name="editBackgroundImage" class="dropify" data-max-file-size="2M"
                                     data-allowed-file-extensions="png jpg jpeg">`);
                 $('.dropify').attr('data-default-file', backgroundPath);
+                $('.dropify').dropify();
+
+                $('#logoFooter').append(`<input type="file" name="editLogoFooter" class="dropify" data-max-file-size="2M"
+                                    data-allowed-file-extensions="png jpg jpeg">`);
+                $('.dropify').attr('data-default-file', logoFooterPath);
                 $('.dropify').dropify();
             }
 

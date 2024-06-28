@@ -7,5 +7,6 @@ return [
     'options'         => 5,
     'participants'    => 6,
     'roles'           => 7,
-    'survey_sections' => 8
+    'survey_sections' => 8,
+    'fonts'           => 9
 ];

@@ -2,17 +2,6 @@
 @section('title', 'Create')
 @section('content')
 
-    @php
-        $fonts = [
-            ['name' => 'Arial', 'value' => 'Arial, sans-serif'],
-            ['name' => 'Times New Roman', 'value' => 'Times New Roman'],
-            ['name' => 'Courier New', 'value' => 'Courier New, Courier, monospace, sans-serif'],
-            ['name' => 'Georgia', 'value' => 'Georgia, serif'],
-            ['name' => 'Trebuchet MS', 'value' => 'Trebuchet MS, Helvetica, sans-serif'],
-            ['name' => 'Verdana', 'value' => 'Verdana, sans-serif'],
-        ];
-    @endphp
-
     {{-- BreadCrumbs --}}
     <nav aria-label="breadcrumb" class="mb-1">
         <ol class="breadcrumb border border-warning px-3 py-2 rounded">
@@ -36,7 +25,7 @@
                 <div class="row">
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="title_ar">Title Ar</label>
+                        <label for="title_ar">Title Ar<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="title_ar" aria-describedby="titleHelp"
                             placeholder="Enter Title" name="title_ar" value="{{ old('title_ar') }}">
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your survey.</small>
@@ -47,7 +36,7 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="title_en">Title En</label>
+                        <label for="title_en">Title En<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="title_en" aria-describedby="titleHelp"
                             placeholder="Enter Title" name="title_en" value="{{ old('title_en') }}">
                         <small id="titleHelp" class="form-text text-muted">Enter a clear title for your survey.</small>
@@ -58,13 +47,15 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="logo">Logo <span class="text-danger">(should be without background - PNG,JPG,JPEG)</span></label>
+                        <label for="logo">Logo <span class="text-danger">(should be without background -
+                                PNG,JPG,JPEG)</span></label>
                         <input type="file" name="logo" class="dropify" data-max-file-size="2M"
                             data-allowed-file-extensions="png jpg jpeg">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3">
-                        <label for="backgroundImage">Background Image <span class="text-danger">(Dimessions-1920px*1080px - PNG,JPG,JPEG)</span></label>
+                        <label for="backgroundImage">Background Image <span class="text-danger">(Dimessions-1920px*1080px -
+                                PNG,JPG,JPEG)</span></label>
                         <input type="file" name="backgroundImage" class="dropify" data-max-file-size="2M"
                             data-allowed-file-extensions="png jpg jpeg">
                     </div>
@@ -89,8 +80,8 @@
                             <label for="font-family-select">Choose a font family:</label>
                             <select id="font-family-select" class="form-control" name="fontFamily">
                                 @foreach ($fonts as $font)
-                                    <option value="{{ $font['value'] }}">
-                                        {{ $font['name'] }}
+                                    <option value="{{ $font['id'] }}">
+                                        {{ $font['title'] }}
                                     </option>
                                 @endforeach
                             </select>
@@ -144,7 +135,7 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3 mb-3">
-                        <label for="footer_ar">Footer Ar</label><span class="text-danger">*</span>
+                        <label for="footer_ar">Footer Ar</label>
                         <textarea name="footer_ar" id="editor_ar">{{ old('footer_ar') }}</textarea>
                         <br>
                         @error('footer_ar')
@@ -153,12 +144,19 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6 mb-3 mb-3">
-                        <label for="footer_en">Footer En</label><span class="text-danger">*</span>
+                        <label for="footer_en">Footer En</label>
                         <textarea name="footer_en" id="editor_en">{{ old('footer_en') }}</textarea>
                         <br>
                         @error('footer_en')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
+                    </div>
+
+                    <div class="form-group col-sm-12  mb-3">
+                        <label for="logoFooter">Logo Footer <span class="text-danger">(should be without background -
+                                PNG,JPG,JPEG)</span></label>
+                        <input type="file" name="logoFooter" class="dropify" data-max-file-size="2M"
+                            data-allowed-file-extensions="png jpg jpeg">
                     </div>
 
                 </div>
